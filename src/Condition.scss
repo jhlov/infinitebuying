@@ -1,0 +1,20 @@
+.condition {
+  background-color: rgb(245, 245, 245);
+  border-radius: 2rem;
+
+  h2 {
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  label {
+    display: block;
+    text-align: left;
+  }
+
+  .d-flex {
+    .form-group {
+      flex: 1;
+    }
+  }
+}
