@@ -1,35 +1,35 @@
 import React, { useMemo, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import "./Condition.scss";
+import { IBBuyingSellingCondition } from "./interfaces";
 
-interface BuyingSellingCondition {
-  orderType: string; // loc, 보통(지정가)
-  priceType: string; // 평단가, 전날 종가
-  rate: number; // 퍼센트
+interface Props {
+  startBacktest: Function;
 }
 
 /**
  * 조건
  */
-const Condition = () => {
+const Condition = ({ startBacktest }: Props) => {
   const [selectedStock, setSelectedStock] = useState<string>("TQQQ");
   const [startDate, setStartDate] = useState<string>("2021-01-01");
   const [money, setMoney] = useState<number>(10000);
-  const [firstBuying, setFirstBuying] = useState<string>("open");
+  const [firstBuyingPriceType, setFirstBuyingPriceType] =
+    useState<string>("close");
   const [buying1Condition, setBuying1Condition] =
-    useState<BuyingSellingCondition>({
+    useState<IBBuyingSellingCondition>({
       orderType: "loc",
       priceType: "avgPrice",
       rate: 0
     });
   const [buying2Condition, setBuying2Condition] =
-    useState<BuyingSellingCondition>({
+    useState<IBBuyingSellingCondition>({
       orderType: "loc",
       priceType: "avgPrice",
       rate: 15
     });
   const [sellingCondition, setSellingCondition] =
-    useState<BuyingSellingCondition>({
+    useState<IBBuyingSellingCondition>({
       orderType: "limitOrder",
       priceType: "avgPrice",
       rate: 10
@@ -124,7 +124,7 @@ const Condition = () => {
    */
   const onChangeFirstBuying = (e: any) => {
     console.log("onChangeFirstBuying", e.target.value);
-    setFirstBuying(e.target.value);
+    setFirstBuyingPriceType(e.target.value);
   };
 
   /**
@@ -140,7 +140,7 @@ const Condition = () => {
    */
   const onChangeBuying2Condition = (key: string, e: any) => {
     const value: any = e.target.value;
-    setBuying1Condition({ ...buying2Condition, [key]: value });
+    setBuying2Condition({ ...buying2Condition, [key]: value });
   };
 
   /**
@@ -148,11 +148,20 @@ const Condition = () => {
    */
   const onChangeSellingCondition = (key: string, e: any) => {
     const value: any = e.target.value;
-    setBuying1Condition({ ...sellingCondition, [key]: value });
+    setSellingCondition({ ...sellingCondition, [key]: value });
   };
 
   const onClickTestStart = () => {
     console.log("onClickTestStart");
+    startBacktest({
+      stock: selectedStock,
+      startDate: startDate,
+      money: money,
+      firstBuyingPriceType: firstBuyingPriceType,
+      buying1Condition: buying1Condition,
+      buying2Condition: buying2Condition,
+      sellingCondition: sellingCondition
+    });
   };
 
   return (
@@ -198,7 +207,7 @@ const Condition = () => {
             <Form.Control
               as="select"
               onChange={onChangeFirstBuying}
-              value={firstBuying}
+              value={firstBuyingPriceType}
             >
               <option value="open">시작가</option>
               <option value="close">종가</option>
