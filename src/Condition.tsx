@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { useMemo, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import "./Condition.scss";
@@ -89,12 +90,14 @@ const Condition = ({ startBacktest }: Props) => {
     return minDateList[selectedStock];
   }, [selectedStock]);
 
+  const maxDate = moment().add(-1, "d").format("YYYY-MM-DD");
+
   /**
    * 주식 종목 셀렉트 변경
    */
   const onChangeStock = (e: any) => {
     const newValue: string = e.target.value;
-    console.log("onChangeStock", newValue);
+    // console.log("onChangeStock", newValue);
     setSelectedStock(newValue);
 
     // min 값 체크 하기
@@ -108,13 +111,13 @@ const Condition = ({ startBacktest }: Props) => {
    */
   const onChangeMoney = (e: any) => {
     const newValue: number = Math.max(minMoney, e.target.value);
-    console.log("onChangeMoney", newValue);
+    // console.log("onChangeMoney", newValue);
     setMoney(newValue);
   };
 
   const onChangeTotalDays = (e: any) => {
     const newValue: number = Math.max(minMoney, e.target.value);
-    console.log("onChangeTotalDays", newValue);
+    // console.log("onChangeTotalDays", newValue);
     setTotalDays(newValue);
   };
 
@@ -122,7 +125,7 @@ const Condition = ({ startBacktest }: Props) => {
    * 시작 날짜 변경
    */
   const onChangeStartDate = (e: any) => {
-    console.log("onChangeStartDate", e.target.value);
+    // console.log("onChangeStartDate", e.target.value);
     setStartDate(e.target.value);
   };
 
@@ -130,7 +133,7 @@ const Condition = ({ startBacktest }: Props) => {
    * 첫날 매수 단가 셀렉트 변경
    */
   const onChangeFirstBuying = (e: any) => {
-    console.log("onChangeFirstBuying", e.target.value);
+    // console.log("onChangeFirstBuying", e.target.value);
     setFirstBuyingPriceType(e.target.value);
   };
 
@@ -159,7 +162,7 @@ const Condition = ({ startBacktest }: Props) => {
   };
 
   const onClickTestStart = () => {
-    console.log("onClickTestStart");
+    // console.log("onClickTestStart");
     startBacktest({
       stock: selectedStock,
       startDate: startDate,
@@ -224,6 +227,7 @@ const Condition = ({ startBacktest }: Props) => {
               type="date"
               value={startDate}
               min={minDate}
+              max={maxDate}
               onChange={onChangeStartDate}
             />
           </Form.Group>
@@ -234,7 +238,7 @@ const Condition = ({ startBacktest }: Props) => {
               onChange={onChangeFirstBuying}
               value={firstBuyingPriceType}
             >
-              <option value="open">시작가</option>
+              {/*<option value="open">시작가</option>*/}
               <option value="close">종가</option>
             </Form.Control>
           </Form.Group>
@@ -249,7 +253,7 @@ const Condition = ({ startBacktest }: Props) => {
                 onChange={e => onChangeBuying1Condition("orderType", e)}
               >
                 <option value="loc">LOC</option>
-                <option value="limitOrder">보통가(지정가)</option>
+                {/*<option value="limitOrder">보통가(지정가)</option>*/}
               </Form.Control>
             </Form.Group>
             <Form.Group controlId="buying-1-pricetype" className="mb-0 mr-1">
@@ -259,7 +263,7 @@ const Condition = ({ startBacktest }: Props) => {
                 onChange={e => onChangeBuying1Condition("priceType", e)}
               >
                 <option value="avgPrice">평단가</option>
-                <option value="yesterdayClose">전날 종가</option>
+                {/*<option value="yesterdayClose">전날 종가</option>*/}
               </Form.Control>
             </Form.Group>
             <Form.Group controlId="buying-1-rate" className="mb-0">
@@ -281,7 +285,7 @@ const Condition = ({ startBacktest }: Props) => {
                 onChange={e => onChangeBuying2Condition("orderType", e)}
               >
                 <option value="loc">LOC</option>
-                <option value="limitOrder">보통가(지정가)</option>
+                {/*<option value="limitOrder">보통가(지정가)</option>*/}
               </Form.Control>
             </Form.Group>
             <Form.Group controlId="buying-2-pricetype" className="mb-0 mr-1">
@@ -291,7 +295,7 @@ const Condition = ({ startBacktest }: Props) => {
                 onChange={e => onChangeBuying2Condition("priceType", e)}
               >
                 <option value="avgPrice">평단가</option>
-                <option value="yesterdayClose">전날 종가</option>
+                {/*<option value="yesterdayClose">전날 종가</option>*/}
               </Form.Control>
             </Form.Group>
             <Form.Group controlId="buying-2-rate" className="mb-0">

@@ -15,4 +15,33 @@ interface IBTestParams {
   sellingCondition: IBBuyingSellingCondition;
 }
 
-export type { IBBuyingSellingCondition, IBTestParams };
+interface IBResponseData {
+  buying_info: {
+    days: number;
+    date: string;
+    close: number;
+    buying_count: number;
+    buying_price: number;
+    avg_price: number;
+    total_count: number;
+    evaluated_price: number;
+    total_price: number;
+    profits: number;
+    profits_rate: number;
+    total_money_profits_rate: number;
+  }[];
+  sell_info: {
+    days: number;
+    date: string;
+    close: number;
+    sell_unit_price: number;
+    sell_count: number;
+    evaluated_price: number;
+    total_price: number;
+    profits: number;
+    profits_rate: number;
+    total_money_profits_rate: number;
+  } | null;
+}
+
+export type { IBBuyingSellingCondition, IBTestParams, IBResponseData };
