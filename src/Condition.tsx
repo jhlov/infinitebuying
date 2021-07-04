@@ -14,6 +14,7 @@ const Condition = ({ startBacktest }: Props) => {
   const [selectedStock, setSelectedStock] = useState<string>("TQQQ");
   const [startDate, setStartDate] = useState<string>("2021-01-01");
   const [money, setMoney] = useState<number>(10000);
+  const [totalDays, setTotalDays] = useState<number>(40);
   const [firstBuyingPriceType, setFirstBuyingPriceType] =
     useState<string>("close");
   const [buying1Condition, setBuying1Condition] =
@@ -111,6 +112,12 @@ const Condition = ({ startBacktest }: Props) => {
     setMoney(newValue);
   };
 
+  const onChangeTotalDays = (e: any) => {
+    const newValue: number = Math.max(minMoney, e.target.value);
+    console.log("onChangeTotalDays", newValue);
+    setTotalDays(newValue);
+  };
+
   /**
    * 시작 날짜 변경
    */
@@ -157,6 +164,7 @@ const Condition = ({ startBacktest }: Props) => {
       stock: selectedStock,
       startDate: startDate,
       money: money,
+      totalDays: totalDays,
       firstBuyingPriceType: firstBuyingPriceType,
       buying1Condition: buying1Condition,
       buying2Condition: buying2Condition,
@@ -182,17 +190,34 @@ const Condition = ({ startBacktest }: Props) => {
               ))}
             </Form.Control>
           </Form.Group>
-          <Form.Group controlId="money">
-            <Form.Label>
-              투자금($) <small>최소 $10,000</small>
-            </Form.Label>
-            <Form.Control
-              type="number"
-              value={money}
-              min={minMoney}
-              onChange={onChangeMoney}
-            />
-          </Form.Group>
+
+          <Row>
+            <Col md={12} lg>
+              <Form.Group controlId="money">
+                <Form.Label>
+                  투자금($) <small>최소 $10,000</small>
+                </Form.Label>
+                <Form.Control
+                  type="number"
+                  value={money}
+                  min={minMoney}
+                  onChange={onChangeMoney}
+                />
+              </Form.Group>
+            </Col>
+            <Col md={12} lg>
+              <Form.Group controlId="total-days">
+                <Form.Label>분할</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={totalDays}
+                  min="1"
+                  onChange={onChangeTotalDays}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+
           <Form.Group controlId="start-date">
             <Form.Label>시작일</Form.Label>
             <Form.Control

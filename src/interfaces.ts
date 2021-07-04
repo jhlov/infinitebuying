@@ -8,6 +8,7 @@ interface IBTestParams {
   stock: string;
   startDate: string;
   money: number;
+  totalDays: number;
   firstBuyingPriceType: string;
   buying1Condition: IBBuyingSellingCondition;
   buying2Condition: IBBuyingSellingCondition;
