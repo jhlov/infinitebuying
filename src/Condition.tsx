@@ -116,7 +116,7 @@ const Condition = ({ startBacktest }: Props) => {
   };
 
   const onChangeTotalDays = (e: any) => {
-    const newValue: number = Math.max(minMoney, e.target.value);
+    const newValue: number = Math.min(100, Math.max(1, e.target.value));
     // console.log("onChangeTotalDays", newValue);
     setTotalDays(newValue);
   };
@@ -198,7 +198,7 @@ const Condition = ({ startBacktest }: Props) => {
             <Col md={12} lg>
               <Form.Group controlId="money">
                 <Form.Label>
-                  투자금($) <small>최소 $10,000</small>
+                  투자금($) <small>(최소 $10,000)</small>
                 </Form.Label>
                 <Form.Control
                   type="number"
@@ -210,11 +210,14 @@ const Condition = ({ startBacktest }: Props) => {
             </Col>
             <Col md={12} lg>
               <Form.Group controlId="total-days">
-                <Form.Label>분할</Form.Label>
+                <Form.Label>
+                  분할 <small>(1 ~ 100)</small>
+                </Form.Label>
                 <Form.Control
                   type="number"
                   value={totalDays}
                   min="1"
+                  max="100"
                   onChange={onChangeTotalDays}
                 />
               </Form.Group>

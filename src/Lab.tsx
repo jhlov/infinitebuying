@@ -36,7 +36,7 @@ const Lab = () => {
             buying1Rate: testParams.buying1Condition.rate,
             buying2OrderType: testParams.buying2Condition.orderType,
             buying2PriceType: testParams.buying2Condition.priceType,
-            buying2Rate: testParams.buying1Condition.rate,
+            buying2Rate: testParams.buying2Condition.rate,
             sellingOrderType: testParams.sellingCondition.orderType,
             sellingPriceType: testParams.sellingCondition.priceType,
             sellingRate: testParams.sellingCondition.rate
@@ -134,10 +134,10 @@ const Lab = () => {
                 <td>{data.sell_info.close}</td>
                 <td></td>
                 <td></td>
-                <td>{data.sell_info.sell_unit_price}</td>
+                <td>{data.sell_info.sell_unit_price.toFixed(2)}</td>
                 <td>{data.sell_info.sell_count}</td>
-                <td>{data.sell_info.evaluated_price}</td>
-                <td>{data.sell_info.total_price}</td>
+                <td>{data.sell_info.evaluated_price.toFixed(2)}</td>
+                <td>{data.sell_info.total_price.toFixed(2)}</td>
                 <td>{data.sell_info.profits.toFixed(2)}</td>
                 <td>{(data.sell_info.profits_rate * 100).toFixed(2)}%</td>
                 <td>
