@@ -4,6 +4,7 @@ import { Spinner, Table } from "react-bootstrap";
 import Condition from "./Condition";
 import { IBResponseData, IBTestParams } from "./interfaces";
 import "./Lab.scss";
+import utils from "./utils";
 
 /**
  * 연구소
@@ -91,14 +92,14 @@ const Lab = () => {
               <tr key={e.days}>
                 <td>{e.days}일</td>
                 <td>{e.date}</td>
-                <td>{e.close}</td>
-                <td>{e.buying_count}</td>
-                <td>{e.buying_price.toFixed(2)}</td>
-                <td>{e.avg_price.toFixed(2)}</td>
-                <td>{e.total_count}</td>
-                <td>{e.evaluated_price.toFixed(2)}</td>
-                <td>{e.total_price.toFixed(2)}</td>
-                <td>{e.profits.toFixed(2)}</td>
+                <td>{utils.intComma(e.close)}</td>
+                <td>{utils.intComma(e.buying_count)}</td>
+                <td>{utils.intComma(e.buying_price.toFixed(2))}</td>
+                <td>{utils.intComma(e.avg_price.toFixed(2))}</td>
+                <td>{utils.intComma(e.total_count)}</td>
+                <td>{utils.intComma(e.evaluated_price.toFixed(2))}</td>
+                <td>{utils.intComma(e.total_price.toFixed(2))}</td>
+                <td>{utils.intComma(e.profits.toFixed(2))}</td>
                 <td>{(e.profits_rate * 100).toFixed(2)}%</td>
                 <td>{(e.total_money_profits_rate * 100).toFixed(2)}%</td>
               </tr>
@@ -131,14 +132,18 @@ const Lab = () => {
               <tr>
                 <td>{data.sell_info.days}일</td>
                 <td>{data.sell_info.date}</td>
-                <td>{data.sell_info.close}</td>
+                <td>{utils.intComma(data.sell_info.close)}</td>
                 <td></td>
                 <td></td>
-                <td>{data.sell_info.sell_unit_price.toFixed(2)}</td>
-                <td>{data.sell_info.sell_count}</td>
-                <td>{data.sell_info.evaluated_price.toFixed(2)}</td>
-                <td>{data.sell_info.total_price.toFixed(2)}</td>
-                <td>{data.sell_info.profits.toFixed(2)}</td>
+                <td>
+                  {utils.intComma(data.sell_info.sell_unit_price.toFixed(2))}
+                </td>
+                <td>{utils.intComma(data.sell_info.sell_count)}</td>
+                <td>
+                  {utils.intComma(data.sell_info.evaluated_price.toFixed(2))}
+                </td>
+                <td>{utils.intComma(data.sell_info.total_price.toFixed(2))}</td>
+                <td>{utils.intComma(data.sell_info.profits.toFixed(2))}</td>
                 <td>{(data.sell_info.profits_rate * 100).toFixed(2)}%</td>
                 <td>
                   {(data.sell_info.total_money_profits_rate * 100).toFixed(2)}%
