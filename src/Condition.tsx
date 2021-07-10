@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { useMemo, useState } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Form, Row } from "react-bootstrap";
 import "./Condition.scss";
 import { IBBuyingSellingCondition } from "./interfaces";
 
@@ -161,6 +161,14 @@ const Condition = ({ startBacktest }: Props) => {
     setSellingCondition({ ...sellingCondition, [key]: value });
   };
 
+  const plusMoney = (value: number) => {
+    setMoney(money + value);
+  };
+
+  const resetMoney = () => {
+    setMoney(10000);
+  };
+
   const onClickTestStart = () => {
     // console.log("onClickTestStart");
     startBacktest({
@@ -196,7 +204,7 @@ const Condition = ({ startBacktest }: Props) => {
 
           <Row>
             <Col md={12} lg>
-              <Form.Group controlId="money">
+              <Form.Group controlId="money" className="mb-1">
                 <Form.Label>
                   투자금($) <small>(최소 $10,000)</small>
                 </Form.Label>
@@ -207,6 +215,29 @@ const Condition = ({ startBacktest }: Props) => {
                   onChange={onChangeMoney}
                 />
               </Form.Group>
+              <ButtonGroup size="sm" className="mb-3 d-flex">
+                <Button
+                  className="py-0"
+                  variant="outline-secondary"
+                  onClick={() => plusMoney(100000)}
+                >
+                  +100,000
+                </Button>
+                <Button
+                  className="py-0"
+                  variant="outline-secondary"
+                  onClick={() => plusMoney(10000)}
+                >
+                  +10,000
+                </Button>
+                <Button
+                  className="py-0"
+                  variant="outline-secondary"
+                  onClick={resetMoney}
+                >
+                  C
+                </Button>
+              </ButtonGroup>
             </Col>
             <Col md={12} lg>
               <Form.Group controlId="total-days">
