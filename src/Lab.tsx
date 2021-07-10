@@ -1,4 +1,5 @@
 import axios from "axios";
+import classNames from "classnames";
 import React, { useState } from "react";
 import { Spinner, Table } from "react-bootstrap";
 import Condition from "./Condition";
@@ -55,6 +56,18 @@ const Lab = () => {
     }
   };
 
+  const isMaximumLoss = (profits_rate: number) => {
+    if (data) {
+      const maximumLoss = data.buying_info
+        .map(e => e.profits_rate)
+        .sort((a, b) => a - b)[0];
+
+      return maximumLoss === profits_rate;
+    }
+
+    return false;
+  };
+
   return (
     <div className="mt-3">
       <Condition startBacktest={startBacktest} />
@@ -100,7 +113,13 @@ const Lab = () => {
                 <td>{utils.intComma(e.evaluated_price.toFixed(2))}</td>
                 <td>{utils.intComma(e.total_price.toFixed(2))}</td>
                 <td>{utils.intComma(e.profits.toFixed(2))}</td>
-                <td>{(e.profits_rate * 100).toFixed(2)}%</td>
+                <td
+                  className={classNames({
+                    "table-danger": isMaximumLoss(e.profits_rate)
+                  })}
+                >
+                  {(e.profits_rate * 100).toFixed(2)}%
+                </td>
                 <td>{(e.total_money_profits_rate * 100).toFixed(2)}%</td>
               </tr>
             ))}
