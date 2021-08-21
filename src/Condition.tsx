@@ -13,6 +13,7 @@ interface Props {
  */
 const Condition = ({ startBacktest }: Props) => {
   const [selectedStock, setSelectedStock] = useState<string>("TQQQ");
+  const [customStock, setCustomStock] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("2021-01-01");
   const [money, setMoney] = useState<number>(10000);
   const [totalDays, setTotalDays] = useState<number>(40);
@@ -39,26 +40,27 @@ const Condition = ({ startBacktest }: Props) => {
 
   const minMoney = 10000;
 
-  const stockList: string[] = [
-    "TECL",
-    "FAS",
-    "RETL",
-    "DPST",
-    "DUSL",
-    "NAIL",
-    "LABU",
-    "TQQQ",
-    "FNGU",
-    "BNKU",
-    "UPRO",
-    "TPOR",
-    "DFEN",
-    "WEBL",
-    "TNA",
-    "MIDU",
-    "HIBL",
-    "WANT",
-    "SOXL"
+  const stockList: string[][] = [
+    ["TECL", "TECL"],
+    ["FAS", "FAS"],
+    ["RETL", "RETL"],
+    ["DPST", "DPST"],
+    ["DUSL", "DUSL"],
+    ["NAIL", "NAIL"],
+    ["LABU", "LABU"],
+    ["TQQQ", "TQQQ"],
+    ["FNGU", "FNGU"],
+    ["BNKU", "BNKU"],
+    ["UPRO", "UPRO"],
+    ["TPOR", "TPOR"],
+    ["DFEN", "DFEN"],
+    ["WEBL", "WEBL"],
+    ["TNA", "TNA"],
+    ["MIDU", "MIDU"],
+    ["HIBL", "HIBL"],
+    ["WANT", "WANT"],
+    ["SOXL", "SOXL"],
+    ["직접선택", "CUSTOM"]
   ];
 
   const minDateList: { [key: string]: string } = {
@@ -80,7 +82,8 @@ const Condition = ({ startBacktest }: Props) => {
     MIDU: "2009-01-09",
     HIBL: "2019-11-08",
     WANT: "2018-12-03",
-    SOXL: "2010-03-12"
+    SOXL: "2010-03-12",
+    CUSTOM: "2000-01-01"
   };
 
   /**
@@ -100,10 +103,23 @@ const Condition = ({ startBacktest }: Props) => {
     // console.log("onChangeStock", newValue);
     setSelectedStock(newValue);
 
+    if (newValue !== "CUSTOM") {
+      setCustomStock("");
+    }
+
     // min 값 체크 하기
     if (startDate < minDateList[newValue]) {
       setStartDate(minDateList[newValue]);
     }
+  };
+
+  /**
+   * 직접 선택 텍스트 변경
+   */
+  const onChangeCustomStock = (e: any) => {
+    const newValue: string = e.target.value;
+    // console.log("onChangeCustomStock", newValue);
+    setCustomStock(newValue);
   };
 
   /**
@@ -172,7 +188,7 @@ const Condition = ({ startBacktest }: Props) => {
   const onClickTestStart = () => {
     // console.log("onClickTestStart");
     startBacktest({
-      stock: selectedStock,
+      stock: selectedStock !== "CUSTOM" ? selectedStock : customStock.trim(),
       startDate: startDate,
       money: money,
       totalDays: totalDays,
@@ -189,17 +205,29 @@ const Condition = ({ startBacktest }: Props) => {
         <Col md={12} lg>
           <Form.Group controlId="stock">
             <Form.Label>종목</Form.Label>
-            <Form.Control
-              as="select"
-              onChange={onChangeStock}
-              value={selectedStock}
-            >
-              {stockList.map(e => (
-                <option key={e} value={e}>
-                  {e}
-                </option>
-              ))}
-            </Form.Control>
+            <Row>
+              <Col>
+                <Form.Control
+                  as="select"
+                  onChange={onChangeStock}
+                  value={selectedStock}
+                >
+                  {stockList.map(e => (
+                    <option key={e[1]} value={e[1]}>
+                      {e[0]}
+                    </option>
+                  ))}
+                </Form.Control>
+              </Col>
+              <Col>
+                <Form.Control
+                  type="text"
+                  value={customStock}
+                  onChange={onChangeCustomStock}
+                  readOnly={selectedStock !== "CUSTOM"}
+                />
+              </Col>
+            </Row>
           </Form.Group>
 
           <Row>
@@ -375,7 +403,12 @@ const Condition = ({ startBacktest }: Props) => {
           </div>
         </Col>
       </Row>
-      <Button onClick={onClickTestStart}>테스트 시작</Button>
+      <Button
+        onClick={onClickTestStart}
+        disabled={selectedStock === "CUSTOM" && customStock.trim() === ""}
+      >
+        테스트 시작
+      </Button>
     </div>
   );
 };

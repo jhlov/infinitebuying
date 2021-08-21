@@ -25,7 +25,8 @@ const Lab = () => {
 
     try {
       const res = await axios.get(
-        "https://54o7jbyvz3.execute-api.ap-northeast-2.amazonaws.com/default/infinitebuying",
+        //"https://54o7jbyvz3.execute-api.ap-northeast-2.amazonaws.com/default/infinitebuying",
+        "https://54o7jbyvz3.execute-api.ap-northeast-2.amazonaws.com/dev/infinitebuying-dev",
         {
           params: {
             stock: testParams.stock,
@@ -51,6 +52,7 @@ const Lab = () => {
       }
     } catch (err) {
       console.log(err);
+      alert(err.response.data.message);
     } finally {
       setLoding(false);
     }
