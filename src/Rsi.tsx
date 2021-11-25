@@ -1,7 +1,7 @@
 import axios from "axios";
 import classNames from "classnames";
 import React, { useEffect, useMemo, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import BootstrapTable, { ColumnDescription } from "react-bootstrap-table-next";
 import { isBrowser, isMobile } from "react-device-detect";
 import "./Rsi.scss";
@@ -161,6 +161,25 @@ export default function Rsi() {
     }
   };
 
+  const onChangeDate = async (e: any) => {
+    setCurDate(e.target.value);
+    try {
+      const res = await axios.get(
+        `https://wl7z14vyrd.execute-api.ap-northeast-2.amazonaws.com/default/today_rsi?date=${e.target.value}`
+      );
+
+      if (res.status === 200) {
+        setCurDate(res.data.date);
+        setTodayRsiDatas(res.data.data);
+      } else {
+        alert(res.data.error);
+      }
+    } catch (err: any) {
+      console.log(err);
+      alert(err.response.data.message);
+    }
+  };
+
   const rowClasses = (row: TodayRsiData, rowIndex: number): string => {
     if (row.rsi < row.recommendedRsi!) {
       return "recommended";
@@ -171,7 +190,7 @@ export default function Rsi() {
 
   return (
     <div className="rsi py-4">
-      <div className="text-right mb-2">
+      <div className="mb-2 d-flex justify-content-end">
         <Button
           variant="outline-secondary"
           size="sm"
@@ -179,7 +198,13 @@ export default function Rsi() {
         >
           {`< 이전날짜`}
         </Button>
-        <span className="mx-2 text-right">{curDate}</span>
+        <Form.Control
+          className="date-input mx-1"
+          type="date"
+          value={curDate}
+          max={lastDate}
+          onChange={onChangeDate}
+        />
         <Button
           variant="outline-secondary"
           size="sm"
@@ -202,6 +227,8 @@ export default function Rsi() {
           condensed
         />
       )}
+
+      {todayRsiDatas.length === 0 && <p>데이터가 없습니다.</p>}
     </div>
   );
 }
