@@ -261,6 +261,13 @@ const Condition = ({ startBacktest }: Props) => {
                 <Button
                   className="py-0"
                   variant="outline-secondary"
+                  onClick={() => plusMoney(1000)}
+                >
+                  +1,000
+                </Button>
+                <Button
+                  className="py-0"
+                  variant="outline-secondary"
                   onClick={resetMoney}
                 >
                   C
