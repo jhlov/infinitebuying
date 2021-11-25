@@ -50,7 +50,7 @@ const Lab = () => {
       if (res.status === 200) {
         setData(res.data);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       alert(err.response.data.message);
     } finally {

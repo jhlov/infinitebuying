@@ -1,14 +1,13 @@
 import classNames from "classnames";
 import React from "react";
+import { isMobile } from "react-device-detect";
 import { HashRouter, Redirect, Route } from "react-router-dom";
 import "./App.scss";
 import Header from "./Header";
 import Lab from "./Lab";
-import Recommend from "./Recommend";
+import Rsi from "./Rsi";
 
 function App() {
-  const isMobile = false;
-
   return (
     <div className="App">
       <div className={classNames(isMobile ? "mobile-container" : "container")}>
@@ -18,7 +17,7 @@ function App() {
             <Redirect to="/lab" />
           </Route>
           <Route path="/lab" component={Lab} />
-          <Route path="/recommend" component={Recommend} />
+          <Route path="/rsi" component={Rsi} />
         </HashRouter>
       </div>
     </div>

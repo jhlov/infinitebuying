@@ -1,0 +1,58 @@
+.rsi {
+  .red {
+    color: red;
+  }
+
+  .blue {
+    color: blue;
+  }
+
+  .recommended {
+    background-color: #2f9d2765;
+  }
+
+  table.mobile {
+    font-size: 0.9rem;
+  }
+
+  .table-condensed {
+    th,
+    td {
+      padding: 4px;
+    }
+  }
+
+  table thead .caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-top: 4px solid \9;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+  }
+
+  table thead .dropup .caret,
+  table thead .navbar-fixed-bottom .dropdown .caret {
+    border-top: 0;
+    border-bottom: 4px dashed;
+    border-bottom: 4px solid \9;
+    content: "";
+  }
+
+  .react-bootstrap-table th > .react-bootstrap-table-sort-order > .caret {
+    margin: 10px 6.5px;
+  }
+
+  .react-bootstrap-table th .order > .dropdown > .caret {
+    margin: 10px 0 10px 5px;
+    color: #cccccc;
+  }
+
+  .react-bootstrap-table th .order > .dropup > .caret {
+    margin: 10px 0;
+    color: #cccccc;
+  }
+}
