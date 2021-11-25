@@ -1,6 +1,7 @@
 import axios from "axios";
 import classNames from "classnames";
 import React, { useEffect, useMemo, useState } from "react";
+import { Button } from "react-bootstrap";
 import BootstrapTable, { ColumnDescription } from "react-bootstrap-table-next";
 import { isBrowser, isMobile } from "react-device-detect";
 import "./Rsi.scss";
@@ -18,7 +19,8 @@ interface TodayRsiData {
 }
 
 export default function Rsi() {
-  const [today, setToday] = useState<string>("");
+  const [lastDate, setLastDate] = useState<string>("");
+  const [curDate, setCurDate] = useState<string>("");
   const [todayRsiDatas, setTodayRsiDatas] = useState<TodayRsiData[]>([]);
   const [columns, setColumns] = useState<ColumnDescription[]>([]);
 
@@ -64,10 +66,9 @@ export default function Rsi() {
       "https://wl7z14vyrd.execute-api.ap-northeast-2.amazonaws.com/default/today_rsi"
     );
 
-    console.log(res);
-
     if (res.status === 200) {
-      setToday(res.data.date);
+      setCurDate(res.data.date);
+      setLastDate(res.data.date);
       setTodayRsiDatas(res.data.data);
     } else {
       alert(res.data.error);
@@ -124,7 +125,7 @@ export default function Rsi() {
         dataField: "volume",
         text: "거래량",
         formatter: (cell: number, row: TodayRsiData) => {
-          return utils.intComma(cell);
+          return utils.intComma(Math.round(cell));
         },
         sort: true
       });
@@ -142,6 +143,24 @@ export default function Rsi() {
     [todayRsiDatas]
   );
 
+  const onClickPrevDate = async (isPrev: boolean) => {
+    try {
+      const res = await axios.get(
+        `https://wl7z14vyrd.execute-api.ap-northeast-2.amazonaws.com/default/today_rsi?date=${curDate}&prev=${isPrev}`
+      );
+
+      if (res.status === 200) {
+        setCurDate(res.data.date);
+        setTodayRsiDatas(res.data.data);
+      } else {
+        alert(res.data.error);
+      }
+    } catch (err: any) {
+      console.log(err);
+      alert(err.response.data.message);
+    }
+  };
+
   const rowClasses = (row: TodayRsiData, rowIndex: number): string => {
     if (row.rsi < row.recommendedRsi!) {
       return "recommended";
@@ -152,7 +171,25 @@ export default function Rsi() {
 
   return (
     <div className="rsi py-4">
-      <p className="text-right mb-1">기준 {today}</p>
+      <div className="text-right mb-2">
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          onClick={() => onClickPrevDate(true)}
+        >
+          {`< 이전날짜`}
+        </Button>
+        <span className="mx-2 text-right">{curDate}</span>
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          onClick={() => onClickPrevDate(false)}
+          disabled={curDate === lastDate}
+        >
+          {`다음날짜 >`}
+        </Button>
+      </div>
+
       {0 < columns.length && (
         <BootstrapTable
           classes={classNames({ mobile: isMobile })}
