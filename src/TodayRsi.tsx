@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import BootstrapTable, { ColumnDescription } from "react-bootstrap-table-next";
 import { isBrowser, isMobile } from "react-device-detect";
+import LoadingLayer from "./LoadingLayer";
 import "./Rsi.scss";
 import TickerList from "./tickerList";
 import utils from "./utils";
@@ -23,6 +24,7 @@ export default function TodayRsi() {
   const [curDate, setCurDate] = useState<string>("");
   const [todayRsiDatas, setTodayRsiDatas] = useState<TodayRsiData[]>([]);
   const [columns, setColumns] = useState<ColumnDescription[]>([]);
+  const [showLoading, setShowLoading] = useState<boolean>(false);
 
   const recommendedRsiList: Record<string, [number, string]> = {
     BNKU: [35, "금융"],
@@ -62,16 +64,22 @@ export default function TodayRsi() {
   }, [isBrowser]);
 
   const initData = async () => {
-    const res = await axios.get(
-      "https://wl7z14vyrd.execute-api.ap-northeast-2.amazonaws.com/default/today_rsi"
-    );
+    setShowLoading(true);
 
-    if (res.status === 200) {
-      setCurDate(res.data.date);
-      setLastDate(res.data.date);
-      setTodayRsiDatas(res.data.data);
-    } else {
-      alert(res.data.error);
+    try {
+      const res = await axios.get(
+        "https://wl7z14vyrd.execute-api.ap-northeast-2.amazonaws.com/default/today_rsi"
+      );
+
+      if (res.status === 200) {
+        setCurDate(res.data.date);
+        setLastDate(res.data.date);
+        setTodayRsiDatas(res.data.data);
+      } else {
+        alert(res.data.error);
+      }
+    } finally {
+      setShowLoading(false);
     }
   };
 
@@ -156,6 +164,8 @@ export default function TodayRsi() {
   );
 
   const onClickPrevDate = async (isPrev: boolean) => {
+    setShowLoading(true);
+
     try {
       const res = await axios.get(
         `https://wl7z14vyrd.execute-api.ap-northeast-2.amazonaws.com/default/today_rsi?date=${curDate}&prev=${isPrev}`
@@ -170,10 +180,14 @@ export default function TodayRsi() {
     } catch (err: any) {
       console.log(err);
       alert(err.response.data.message);
+    } finally {
+      setShowLoading(false);
     }
   };
 
   const onChangeDate = async (e: any) => {
+    setShowLoading(true);
+
     setCurDate(e.target.value);
     try {
       const res = await axios.get(
@@ -189,6 +203,8 @@ export default function TodayRsi() {
     } catch (err: any) {
       console.log(err);
       alert(err.response.data.message);
+    } finally {
+      setShowLoading(false);
     }
   };
 
@@ -244,6 +260,8 @@ export default function TodayRsi() {
       )}
 
       {todayRsiDatas.length === 0 && <p>데이터가 없습니다.</p>}
+
+      {showLoading && <LoadingLayer />}
     </div>
   );
 }

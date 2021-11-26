@@ -75,6 +75,20 @@
       thead {
         font-size: 0.8rem;
       }
+
+      .fixed-cell {
+        position: sticky;
+        left: 0;
+        box-shadow: 0 1px #dee2e6, 0 -1px #dee2e6; /*1st for bottom, 2nd for top*/
+
+        &.white {
+          background-color: white;
+        }
+
+        &.gray {
+          background-color: rgb(245, 245, 245);
+        }
+      }
     }
   }
 }
