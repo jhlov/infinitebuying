@@ -219,7 +219,6 @@ export default function Rsi() {
         <BootstrapTable
           classes={classNames({ mobile: isMobile })}
           keyField="ticker"
-          sort={{ dataField: "ticker", order: "asc" }}
           data={data}
           columns={columns}
           rowClasses={rowClasses}
