@@ -63,4 +63,18 @@
     margin: 10px 0;
     color: #cccccc;
   }
+
+  .period-rsi {
+    .react-bootstrap-table {
+      overflow-x: auto;
+    }
+
+    .table {
+      font-size: 0.9rem;
+
+      thead {
+        font-size: 0.8rem;
+      }
+    }
+  }
 }
