@@ -24,32 +24,32 @@ export default function Rsi() {
   const [todayRsiDatas, setTodayRsiDatas] = useState<TodayRsiData[]>([]);
   const [columns, setColumns] = useState<ColumnDescription[]>([]);
 
-  const recommendedRsiList: Record<string, number> = {
-    BNKU: 35,
-    DFEN: 40,
-    DPST: 35,
-    DUSL: 40,
-    FAS: 45,
-    FNGU: 55,
-    HIBL: 55,
-    LABU: 45,
-    MIDU: 45,
-    NAIL: 50,
-    RETL: 50,
-    SOXL: 65,
-    TECL: 60,
-    TNA: 50,
-    TPOR: 40,
-    TQQQ: 60,
-    UPRO: 55,
-    WANT: 55,
-    WEBL: 60,
-    BULZ: 65,
-    UDOW: 50,
-    PILL: 45,
-    CURE: 45,
-    DRN: 40,
-    UTSL: 35
+  const recommendedRsiList: Record<string, [number, string]> = {
+    BNKU: [35, "금융"],
+    BULZ: [65, "기술"],
+    CURE: [45, "바이오"],
+    DFEN: [40, "항공우주"],
+    DPST: [35, "금융"],
+    DRN: [40, "부동산"],
+    DUSL: [40, "산업재"],
+    FAS: [45, "금융"],
+    FNGU: [55, "기술"],
+    HIBL: [55, "S&P500"],
+    LABU: [45, "바이오"],
+    MIDU: [45, "중소형/소비재"],
+    NAIL: [50, "건설"],
+    PILL: [45, "바이오"],
+    RETL: [50, "소매유통"],
+    SOXL: [65, "기술"],
+    TECL: [60, "기술"],
+    TNA: [50, "중소형/소비재"],
+    TPOR: [40, "운송"],
+    TQQQ: [60, "기술"],
+    UDOW: [50, "다우존스"],
+    UPRO: [55, "S&P500"],
+    UTSL: [35, "유틸리티"],
+    WANT: [55, "중소형/소비재"],
+    WEBL: [60, "기술"]
   };
 
   useEffect(() => {
@@ -77,6 +77,11 @@ export default function Rsi() {
 
   const updateColumns = () => {
     const _columns = [
+      {
+        dataField: "sector",
+        text: "섹터",
+        sort: true
+      },
       {
         dataField: "ticker",
         text: "Ticker",
@@ -106,15 +111,21 @@ export default function Rsi() {
         formatter: (cell: number, row: TodayRsiData) => {
           if (0 < cell) {
             return (
-              <span className="red">{`▲ ${(cell * 100).toFixed(1)} %`}</span>
+              <span className="change red">{`▲ ${(cell * 100).toFixed(
+                1
+              )} %`}</span>
             );
           } else if (cell < 0) {
             return (
-              <span className="blue">{`▼ ${(cell * 100).toFixed(1)} %`}</span>
+              <span className="change blue">{`▼ ${(cell * 100).toFixed(
+                1
+              )} %`}</span>
             );
           }
 
-          return (cell * 100).toFixed(1) + "%";
+          return (
+            <span className="change">{(cell * 100).toFixed(1) + "%"}</span>
+          );
         },
         sort: true
       }
@@ -138,7 +149,8 @@ export default function Rsi() {
     () =>
       todayRsiDatas.map(e => ({
         ...e,
-        recommendedRsi: recommendedRsiList[e.ticker]
+        recommendedRsi: recommendedRsiList[e.ticker][0],
+        sector: recommendedRsiList[e.ticker][1]
       })),
     [todayRsiDatas]
   );
@@ -190,13 +202,17 @@ export default function Rsi() {
 
   return (
     <div className="rsi py-4">
-      <div className="mb-2 d-flex justify-content-end">
+      <div
+        className={classNames("mb-2 d-flex", [
+          isBrowser ? "justify-content-end" : "justify-content-center"
+        ])}
+      >
         <Button
           variant="outline-secondary"
           size="sm"
           onClick={() => onClickPrevDate(true)}
         >
-          {`< 이전날짜`}
+          {isBrowser ? `< 이전날짜` : "<<"}
         </Button>
         <Form.Control
           className="date-input mx-1"
@@ -211,7 +227,7 @@ export default function Rsi() {
           onClick={() => onClickPrevDate(false)}
           disabled={curDate === lastDate}
         >
-          {`다음날짜 >`}
+          {isBrowser ? `다음날짜 >` : ">>"}
         </Button>
       </div>
 

@@ -16,7 +16,11 @@
   }
 
   table.mobile {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+
+    .change {
+      word-spacing: -5px;
+    }
   }
 
   .table-condensed {
