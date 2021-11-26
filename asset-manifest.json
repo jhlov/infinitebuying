@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/infinitebuying/static/css/main.5c2fef43.chunk.css",
-    "main.js": "/infinitebuying/static/js/main.2dcf32ba.chunk.js",
-    "runtime-main.js": "/infinitebuying/static/js/runtime-main.c89dcc75.js",
-    "static/js/2.5e2f1075.chunk.js": "/infinitebuying/static/js/2.5e2f1075.chunk.js",
-    "static/js/3.78b84115.chunk.js": "/infinitebuying/static/js/3.78b84115.chunk.js",
+    "main.css": "/infinitebuying/static/css/main.0754414e.chunk.css",
+    "main.js": "/infinitebuying/static/js/main.2cb1c9b4.chunk.js",
+    "runtime-main.js": "/infinitebuying/static/js/runtime-main.d880a33b.js",
+    "static/js/2.cc170c81.chunk.js": "/infinitebuying/static/js/2.cc170c81.chunk.js",
+    "static/js/3.d1e337b7.chunk.js": "/infinitebuying/static/js/3.d1e337b7.chunk.js",
     "index.html": "/infinitebuying/index.html",
-    "static/js/2.5e2f1075.chunk.js.LICENSE.txt": "/infinitebuying/static/js/2.5e2f1075.chunk.js.LICENSE.txt"
+    "static/js/2.cc170c81.chunk.js.LICENSE.txt": "/infinitebuying/static/js/2.cc170c81.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.c89dcc75.js",
-    "static/js/2.5e2f1075.chunk.js",
-    "static/css/main.5c2fef43.chunk.css",
-    "static/js/main.2dcf32ba.chunk.js"
+    "static/js/runtime-main.d880a33b.js",
+    "static/js/2.cc170c81.chunk.js",
+    "static/css/main.0754414e.chunk.css",
+    "static/js/main.2cb1c9b4.chunk.js"
   ]
 }
