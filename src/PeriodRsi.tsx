@@ -4,7 +4,7 @@ import moment from "moment";
 import React, { useEffect, useMemo, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import BootstrapTable, { ColumnDescription } from "react-bootstrap-table-next";
-import { isMobile } from "react-device-detect";
+import { isBrowser, isMobile } from "react-device-detect";
 import LoadingLayer from "./LoadingLayer";
 import "./Rsi.scss";
 
@@ -139,37 +139,78 @@ export default function PeriodRsi() {
     });
   }, [rsiData]);
 
+  const onClickScroolStart = () => {
+    const element = document.querySelector(
+      ".period-rsi .react-bootstrap-table"
+    );
+    if (element) {
+      element.scrollLeft = 0;
+    }
+  };
+
+  const onClickScroolEnd = () => {
+    const element = document.querySelector(
+      ".period-rsi .react-bootstrap-table"
+    );
+    if (element) {
+      element.scrollLeft = element.scrollWidth;
+    }
+  };
+
   return (
     <div className="rsi period-rsi py-4">
       <div
-        className={classNames(
-          "mb-2 d-flex justify-content-end align-items-center",
-          { "flex-column": isMobile }
-        )}
+        className={classNames("mb-2 d-flex d-flex justify-content-between", [
+          isBrowser ? "align-items-center" : "align-items-end"
+        ])}
       >
-        <Form.Control
-          className="date-input mx-1"
-          type="date"
-          value={startDate}
-          max={moment().format("YYYY-MM-DD")}
-          onChange={onChangeStartDate}
-        />{" "}
-        ~
-        <Form.Control
-          className="date-input mx-1"
-          type="date"
-          value={endDate}
-          max={moment().format("YYYY-MM-DD")}
-          onChange={onChangeEndDate}
-        />
-        <Button
-          className={classNames({ "mt-2": isMobile })}
-          variant="outline-secondary"
-          onClick={onClickSearch}
+        <div>
+          <Button
+            className={classNames({ "mt-2": isMobile })}
+            variant="outline-secondary"
+            onClick={onClickScroolStart}
+          >
+            {`<`}
+          </Button>
+          <Button
+            className={classNames({ "mt-2": isMobile })}
+            variant="outline-secondary"
+            onClick={onClickScroolEnd}
+          >
+            {`>`}
+          </Button>
+        </div>
+        <div
+          className={classNames(
+            "d-flex justify-content-end align-items-center",
+            { "flex-column": isMobile }
+          )}
         >
-          조회
-        </Button>
+          <Form.Control
+            className="date-input mx-1"
+            type="date"
+            value={startDate}
+            max={moment().format("YYYY-MM-DD")}
+            onChange={onChangeStartDate}
+          />{" "}
+          ~
+          <Form.Control
+            className="date-input mx-1"
+            type="date"
+            value={endDate}
+            max={moment().format("YYYY-MM-DD")}
+            onChange={onChangeEndDate}
+          />
+          <Button
+            className={classNames({ "mt-2": isMobile })}
+            variant="outline-secondary"
+            onClick={onClickSearch}
+          >
+            조회
+          </Button>
+        </div>
       </div>
+
       {0 < timestamp.length && (
         <BootstrapTable
           classes={classNames({ mobile: isMobile })}
