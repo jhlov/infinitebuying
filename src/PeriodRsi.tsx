@@ -62,7 +62,6 @@ export default function PeriodRsi() {
       );
 
       if (res.status === 200) {
-        console.log(res.data);
         setTimestamp(res.data.timestamp);
         setRsiData(res.data.rsi);
         setCloseData(res.data.close);
