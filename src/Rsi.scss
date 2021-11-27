@@ -11,8 +11,24 @@
     color: blue;
   }
 
+  .recommended_10 {
+    background-color: #2f9d2735 !important;
+  }
+
+  .recommended_20 {
+    background-color: #2f9d2745 !important;
+  }
+
+  .recommended_30 {
+    background-color: #2f9d2755 !important;
+  }
+
+  .recommended_40 {
+    background-color: #2f9d2775 !important;
+  }
+
   .recommended {
-    background-color: #2f9d2765 !important;
+    background-color: #2f9d2795 !important;
   }
 
   table.mobile {
@@ -79,7 +95,6 @@
       .fixed-cell {
         position: sticky;
         left: 0;
-        box-shadow: 0 1px #dee2e6, 0 -1px #dee2e6; /*1st for bottom, 2nd for top*/
 
         &.white {
           background-color: white;

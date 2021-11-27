@@ -104,7 +104,19 @@ export default function PeriodRsi() {
         text: e,
         classes: (cell: any, row: any, rowIndex: any, colIndex: any) => {
           if (row[e] && row[e] < row.recommendedRsi) {
-            return "recommended";
+            const rate: number =
+              ((row.recommendedRsi - row[e]) / row.recommendedRsi) * 100;
+            if (rate < 10) {
+              return "recommended_10";
+            } else if (rate < 20) {
+              return "recommended_20";
+            } else if (rate < 30) {
+              return "recommended_30";
+            } else if (rate < 40) {
+              return "recommended_40";
+            } else {
+              return "recommended";
+            }
           }
 
           return "";
@@ -165,7 +177,6 @@ export default function PeriodRsi() {
           keyField="ticker"
           data={tableData}
           columns={tableColumns}
-          striped
           condensed
         />
       )}

@@ -210,7 +210,19 @@ export default function TodayRsi() {
 
   const rowClasses = (row: TodayRsiData, rowIndex: number): string => {
     if (row.rsi < row.recommendedRsi!) {
-      return "recommended";
+      const rate: number =
+        ((row.recommendedRsi! - row.rsi) / row.recommendedRsi!) * 100;
+      if (rate < 10) {
+        return "recommended_10";
+      } else if (rate < 20) {
+        return "recommended_20";
+      } else if (rate < 30) {
+        return "recommended_30";
+      } else if (rate < 40) {
+        return "recommended_40";
+      } else {
+        return "recommended";
+      }
     }
 
     return "";
@@ -254,7 +266,6 @@ export default function TodayRsi() {
           data={data}
           columns={columns}
           rowClasses={rowClasses}
-          striped
           condensed
         />
       )}
