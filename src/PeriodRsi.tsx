@@ -7,8 +7,14 @@ import BootstrapTable, { ColumnDescription } from "react-bootstrap-table-next";
 import { isBrowser, isMobile } from "react-device-detect";
 import LoadingLayer from "./LoadingLayer";
 import "./Rsi.scss";
+import { ShowType, TickerType } from "./types";
 
-export default function PeriodRsi() {
+interface Props {
+  showType: ShowType;
+  staredItemList: TickerType[];
+}
+
+export default function PeriodRsi(props: Props) {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [timestamp, setTimestamp] = useState<string[]>([]);
@@ -125,19 +131,25 @@ export default function PeriodRsi() {
   }, [timestamp]);
 
   const tableData = useMemo(() => {
-    return Object.entries(rsiData).map((data: [string, number[]]): any => {
-      const dict: any = {
-        ticker: data[0]
-      };
+    return Object.entries(rsiData)
+      .map((data: [string, number[]]): any => {
+        const dict: any = {
+          ticker: data[0]
+        };
 
-      timestamp.forEach((time, i) => {
-        dict[time] = data[1][i];
-        dict["recommendedRsi"] = recommendedRsiList[data[0]];
-      });
+        timestamp.forEach((time, i) => {
+          dict[time] = data[1][i];
+          dict["recommendedRsi"] = recommendedRsiList[data[0]];
+        });
 
-      return dict;
-    });
-  }, [rsiData]);
+        return dict;
+      })
+      .filter(e =>
+        props.showType === "all"
+          ? true
+          : props.staredItemList.includes(e.ticker)
+      );
+  }, [rsiData, props.showType, props.staredItemList]);
 
   const onClickScroolStart = () => {
     const element = document.querySelector(

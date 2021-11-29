@@ -1,4 +1,6 @@
-type TickerList =
+type ShowType = "all" | "stared";
+
+type TickerType =
   | "BNKU"
   | "BULZ"
   | "CURE"
@@ -25,4 +27,4 @@ type TickerList =
   | "WANT"
   | "WEBL";
 
-export default TickerList;
+export type { ShowType, TickerType };

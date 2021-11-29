@@ -6,7 +6,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { isBrowser, isMobile } from "react-device-detect";
 import LoadingLayer from "./LoadingLayer";
 import "./Rsi.scss";
-import TickerList from "./tickerList";
+import { ShowType, TickerType } from "./types";
 import utils from "./utils";
 
 interface TodayRsiData {
@@ -15,23 +15,24 @@ interface TodayRsiData {
   diff: number;
   rsi: number;
   volume: number;
-  ticker: TickerList;
+  ticker: TickerType;
   sector?: string;
   recommendedRsi?: number;
   isStared?: boolean;
 }
 
-type ShowType = "all" | "stared";
+interface Props {
+  showType: ShowType;
+  setShowType: (showType: ShowType) => void;
+  staredItemList: TickerType[];
+  onClickStaredItem: (ticker: TickerType) => void;
+}
 
-export default function TodayRsi() {
-  const [showType, setShowType] = useState<ShowType>(
-    (localStorage.getItem("show_type") as ShowType) ?? "all"
-  );
+export default function TodayRsi(props: Props) {
   const [lastDate, setLastDate] = useState<string>("");
   const [curDate, setCurDate] = useState<string>("");
   const [todayRsiDatas, setTodayRsiDatas] = useState<TodayRsiData[]>([]);
   const [showLoading, setShowLoading] = useState<boolean>(false);
-  const [staredItemList, setStaredItemList] = useState<TickerList[]>([]);
 
   const recommendedRsiList: { [key: string]: [number, string] } = {
     BNKU: [35, "금융"],
@@ -62,18 +63,8 @@ export default function TodayRsi() {
   };
 
   useEffect(() => {
-    // init stared item
-    const itemList = localStorage.getItem("star_item_list");
-    if (itemList) {
-      setStaredItemList(itemList.split(",") as TickerList[]);
-    }
-
     initData();
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("star_item_list", staredItemList.join(","));
-  }, [staredItemList]);
 
   const initData = async () => {
     setShowLoading(true);
@@ -104,14 +95,14 @@ export default function TodayRsi() {
           return (
             <span
               className={classNames("star", { stared: cell })}
-              onClick={() => onClickStar(row.ticker)}
+              onClick={() => props.onClickStaredItem(row.ticker)}
             >
               {cell ? "★" : "☆"}
             </span>
           );
         },
         formatExtraData: {
-          staredItemList: staredItemList
+          staredItemList: props.staredItemList
         }
       },
       {
@@ -180,21 +171,23 @@ export default function TodayRsi() {
     }
 
     return _columns;
-  }, [isBrowser, staredItemList]);
+  }, [isBrowser, props.staredItemList]);
 
   const data = useMemo(
     () =>
       todayRsiDatas
         .filter(e =>
-          showType === "all" ? true : staredItemList.includes(e.ticker)
+          props.showType === "all"
+            ? true
+            : props.staredItemList.includes(e.ticker)
         )
         .map(e => ({
           ...e,
           recommendedRsi: recommendedRsiList[e.ticker][0],
           sector: recommendedRsiList[e.ticker][1],
-          isStared: staredItemList.includes(e.ticker)
+          isStared: props.staredItemList.includes(e.ticker)
         })),
-    [todayRsiDatas, staredItemList, showType]
+    [todayRsiDatas, props.staredItemList, props.showType]
   );
 
   const onClickPrevDate = async (isPrev: boolean) => {
@@ -242,16 +235,8 @@ export default function TodayRsi() {
     }
   };
 
-  const onClickStar = (ticker: TickerList) => {
-    if (staredItemList.includes(ticker)) {
-      setStaredItemList(staredItemList.filter(e => e !== ticker));
-    } else {
-      setStaredItemList([...staredItemList, ticker]);
-    }
-  };
-
   const onChangeShowType = (type: ShowType) => {
-    setShowType(type);
+    props.setShowType(type);
     localStorage.setItem("show_type", type);
   };
 
@@ -289,7 +274,7 @@ export default function TodayRsi() {
             name="radio"
             variant="outline-secondary"
             value="전체보기"
-            checked={showType === "all"}
+            checked={props.showType === "all"}
             onChange={() => onChangeShowType("all")}
           >
             전체보기
@@ -299,7 +284,7 @@ export default function TodayRsi() {
             name="radio"
             variant="outline-secondary"
             value="전체보기"
-            checked={showType === "stared"}
+            checked={props.showType === "stared"}
             onChange={() => onChangeShowType("stared")}
           >
             즐겨찾기
