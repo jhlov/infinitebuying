@@ -1,7 +1,7 @@
 import axios from "axios";
 import classNames from "classnames";
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, ButtonGroup, Form, ToggleButton } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import { isBrowser, isMobile } from "react-device-detect";
 import LoadingLayer from "./LoadingLayer";
@@ -21,7 +21,12 @@ interface TodayRsiData {
   isStared?: boolean;
 }
 
+type ShowType = "all" | "stared";
+
 export default function TodayRsi() {
+  const [showType, setShowType] = useState<ShowType>(
+    (localStorage.getItem("show_type") as ShowType) ?? "all"
+  );
   const [lastDate, setLastDate] = useState<string>("");
   const [curDate, setCurDate] = useState<string>("");
   const [todayRsiDatas, setTodayRsiDatas] = useState<TodayRsiData[]>([]);
@@ -179,13 +184,17 @@ export default function TodayRsi() {
 
   const data = useMemo(
     () =>
-      todayRsiDatas.map(e => ({
-        ...e,
-        recommendedRsi: recommendedRsiList[e.ticker][0],
-        sector: recommendedRsiList[e.ticker][1],
-        isStared: staredItemList.includes(e.ticker)
-      })),
-    [todayRsiDatas, staredItemList]
+      todayRsiDatas
+        .filter(e =>
+          showType === "all" ? true : staredItemList.includes(e.ticker)
+        )
+        .map(e => ({
+          ...e,
+          recommendedRsi: recommendedRsiList[e.ticker][0],
+          sector: recommendedRsiList[e.ticker][1],
+          isStared: staredItemList.includes(e.ticker)
+        })),
+    [todayRsiDatas, staredItemList, showType]
   );
 
   const onClickPrevDate = async (isPrev: boolean) => {
@@ -241,6 +250,11 @@ export default function TodayRsi() {
     }
   };
 
+  const onChangeShowType = (type: ShowType) => {
+    setShowType(type);
+    localStorage.setItem("show_type", type);
+  };
+
   const rowClasses = (row: TodayRsiData, rowIndex: number): string => {
     if (row.rsi < row.recommendedRsi!) {
       const rate: number =
@@ -264,32 +278,57 @@ export default function TodayRsi() {
   return (
     <div className="rsi py-4">
       <div
-        className={classNames("mb-2 d-flex", [
-          isBrowser ? "justify-content-end" : "justify-content-center"
-        ])}
+        className={classNames(
+          "mb-2 d-flex justify-content-between align-items-center",
+          { "flex-column": isMobile }
+        )}
       >
-        <Button
-          variant="outline-secondary"
-          size="sm"
-          onClick={() => onClickPrevDate(true)}
-        >
-          {isBrowser ? `< 이전날짜` : "<<"}
-        </Button>
-        <Form.Control
-          className="date-input mx-1"
-          type="date"
-          value={curDate}
-          max={lastDate}
-          onChange={onChangeDate}
-        />
-        <Button
-          variant="outline-secondary"
-          size="sm"
-          onClick={() => onClickPrevDate(false)}
-          disabled={curDate === lastDate}
-        >
-          {isBrowser ? `다음날짜 >` : ">>"}
-        </Button>
+        <ButtonGroup className={classNames({ "mb-2": isMobile })} toggle>
+          <ToggleButton
+            type="radio"
+            name="radio"
+            variant="outline-secondary"
+            value="전체보기"
+            checked={showType === "all"}
+            onChange={() => onChangeShowType("all")}
+          >
+            전체보기
+          </ToggleButton>
+          <ToggleButton
+            type="radio"
+            name="radio"
+            variant="outline-secondary"
+            value="전체보기"
+            checked={showType === "stared"}
+            onChange={() => onChangeShowType("stared")}
+          >
+            즐겨찾기
+          </ToggleButton>
+        </ButtonGroup>
+        <div className="d-flex">
+          <Button
+            variant="outline-secondary"
+            size="sm"
+            onClick={() => onClickPrevDate(true)}
+          >
+            {isBrowser ? `< 이전날짜` : "<<"}
+          </Button>
+          <Form.Control
+            className="date-input mx-1"
+            type="date"
+            value={curDate}
+            max={lastDate}
+            onChange={onChangeDate}
+          />
+          <Button
+            variant="outline-secondary"
+            size="sm"
+            onClick={() => onClickPrevDate(false)}
+            disabled={curDate === lastDate}
+          >
+            {isBrowser ? `다음날짜 >` : ">>"}
+          </Button>
+        </div>
       </div>
 
       {0 < columns.length && (
