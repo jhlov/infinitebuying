@@ -300,10 +300,9 @@ export default function TodayRsi() {
           columns={columns}
           rowClasses={rowClasses}
           condensed
+          noDataIndication="데이터가 없습니다."
         />
       )}
-
-      {todayRsiDatas.length === 0 && <p>데이터가 없습니다.</p>}
 
       {showLoading && <LoadingLayer />}
     </div>

@@ -218,6 +218,7 @@ export default function PeriodRsi() {
           data={tableData}
           columns={tableColumns}
           condensed
+          noDataIndication="데이터가 없습니다."
         />
       )}
 
