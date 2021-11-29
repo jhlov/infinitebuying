@@ -11,6 +11,14 @@
     color: blue;
   }
 
+  .star {
+    cursor: pointer;
+
+    &.stared {
+      color: gold;
+    }
+  }
+
   .recommended_10 {
     background-color: #2f9d2735 !important;
   }

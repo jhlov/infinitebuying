@@ -2,7 +2,7 @@ import axios from "axios";
 import classNames from "classnames";
 import React, { useEffect, useMemo, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import BootstrapTable, { ColumnDescription } from "react-bootstrap-table-next";
+import BootstrapTable from "react-bootstrap-table-next";
 import { isBrowser, isMobile } from "react-device-detect";
 import LoadingLayer from "./LoadingLayer";
 import "./Rsi.scss";
@@ -16,17 +16,19 @@ interface TodayRsiData {
   rsi: number;
   volume: number;
   ticker: TickerList;
+  sector?: string;
   recommendedRsi?: number;
+  isStared?: boolean;
 }
 
 export default function TodayRsi() {
   const [lastDate, setLastDate] = useState<string>("");
   const [curDate, setCurDate] = useState<string>("");
   const [todayRsiDatas, setTodayRsiDatas] = useState<TodayRsiData[]>([]);
-  const [columns, setColumns] = useState<ColumnDescription[]>([]);
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  const [staredItemList, setStaredItemList] = useState<TickerList[]>([]);
 
-  const recommendedRsiList: Record<string, [number, string]> = {
+  const recommendedRsiList: { [key: string]: [number, string] } = {
     BNKU: [35, "금융"],
     BULZ: [65, "기술"],
     CURE: [45, "바이오"],
@@ -55,13 +57,18 @@ export default function TodayRsi() {
   };
 
   useEffect(() => {
+    // init stared item
+    const itemList = localStorage.getItem("star_item_list");
+    if (itemList) {
+      setStaredItemList(itemList.split(",") as TickerList[]);
+    }
+
     initData();
-    updateColumns();
   }, []);
 
   useEffect(() => {
-    updateColumns();
-  }, [isBrowser]);
+    localStorage.setItem("star_item_list", staredItemList.join(","));
+  }, [staredItemList]);
 
   const initData = async () => {
     setShowLoading(true);
@@ -83,8 +90,25 @@ export default function TodayRsi() {
     }
   };
 
-  const updateColumns = () => {
+  const columns = useMemo(() => {
     const _columns = [
+      {
+        dataField: "isStared",
+        text: "",
+        formatter: (cell: boolean, row: TodayRsiData) => {
+          return (
+            <span
+              className={classNames("star", { stared: cell })}
+              onClick={() => onClickStar(row.ticker)}
+            >
+              {cell ? "★" : "☆"}
+            </span>
+          );
+        },
+        formatExtraData: {
+          staredItemList: staredItemList
+        }
+      },
       {
         dataField: "sector",
         text: "섹터",
@@ -150,17 +174,18 @@ export default function TodayRsi() {
       });
     }
 
-    setColumns(_columns);
-  };
+    return _columns;
+  }, [isBrowser, staredItemList]);
 
   const data = useMemo(
     () =>
       todayRsiDatas.map(e => ({
         ...e,
         recommendedRsi: recommendedRsiList[e.ticker][0],
-        sector: recommendedRsiList[e.ticker][1]
+        sector: recommendedRsiList[e.ticker][1],
+        isStared: staredItemList.includes(e.ticker)
       })),
-    [todayRsiDatas]
+    [todayRsiDatas, staredItemList]
   );
 
   const onClickPrevDate = async (isPrev: boolean) => {
@@ -205,6 +230,14 @@ export default function TodayRsi() {
       alert(err.response.data.message);
     } finally {
       setShowLoading(false);
+    }
+  };
+
+  const onClickStar = (ticker: TickerList) => {
+    if (staredItemList.includes(ticker)) {
+      setStaredItemList(staredItemList.filter(e => e !== ticker));
+    } else {
+      setStaredItemList([...staredItemList, ticker]);
     }
   };
 

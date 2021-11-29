@@ -1,29 +1,28 @@
-enum TickerList {
-  BNKU,
-  DFEN,
-  DPST,
-  DUSL,
-  FAS,
-  FNGU,
-  HIBL,
-  LABU,
-  MIDU,
-  NAIL,
-  RETL,
-  SOXL,
-  TECL,
-  TNA,
-  TPOR,
-  TQQQ,
-  UPRO,
-  WANT,
-  WEBL,
-  BULZ,
-  UDOW,
-  PILL,
-  CURE,
-  DRN,
-  UTSL
-}
+type TickerList =
+  | "BNKU"
+  | "BULZ"
+  | "CURE"
+  | "DFEN"
+  | "DPST"
+  | "DRN"
+  | "DUSL"
+  | "FAS"
+  | "FNGU"
+  | "HIBL"
+  | "LABU"
+  | "MIDU"
+  | "NAIL"
+  | "PILL"
+  | "RETL"
+  | "SOXL"
+  | "TECL"
+  | "TNA"
+  | "TPOR"
+  | "TQQQ"
+  | "UDOW"
+  | "UPRO"
+  | "UTSL"
+  | "WANT"
+  | "WEBL";
 
 export default TickerList;
