@@ -1,7 +1,16 @@
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import classNames from "classnames";
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, ButtonGroup, Form, ToggleButton } from "react-bootstrap";
+import {
+  Button,
+  ButtonGroup,
+  Form,
+  OverlayTrigger,
+  ToggleButton,
+  Tooltip
+} from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import { isBrowser, isMobile } from "react-device-detect";
 import LoadingLayer from "./LoadingLayer";
@@ -290,10 +299,9 @@ export default function TodayRsi(props: Props) {
             즐겨찾기
           </ToggleButton>
         </ButtonGroup>
-        <div className="d-flex">
+        <div className="d-flex align-items-center">
           <Button
             variant="outline-secondary"
-            size="sm"
             onClick={() => onClickPrevDate(true)}
           >
             {isBrowser ? `< 이전날짜` : "<<"}
@@ -306,13 +314,21 @@ export default function TodayRsi(props: Props) {
             onChange={onChangeDate}
           />
           <Button
+            className="mr-2"
             variant="outline-secondary"
-            size="sm"
             onClick={() => onClickPrevDate(false)}
             disabled={curDate === lastDate}
           >
             {isBrowser ? `다음날짜 >` : ">>"}
           </Button>
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip id="tooltip">업데이트 시간: 매일 9시 10분</Tooltip>
+            }
+          >
+            <FontAwesomeIcon icon={faInfoCircle} />
+          </OverlayTrigger>
         </div>
       </div>
 

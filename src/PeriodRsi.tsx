@@ -51,7 +51,10 @@ export default function PeriodRsi(props: Props) {
   };
 
   useEffect(() => {
-    const start = moment().subtract(1, "years").format("YYYY-MM-DD");
+    const start = moment()
+      .subtract(1, "months")
+      .add(1, "days")
+      .format("YYYY-MM-DD");
     const end = moment().format("YYYY-MM-DD");
     setStartDate(start);
     setEndDate(end);
