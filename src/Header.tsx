@@ -10,7 +10,9 @@ const Header = () => {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
           <Nav.Link href="#lab">연구소</Nav.Link>
-          <Nav.Link href="#rsi">RSI</Nav.Link>
+          <Nav.Link className="position-relative" href="#rsi">
+            RSI<span className="new">NEW</span>
+          </Nav.Link>
           {/*<Nav.Link href="#recommend">종목추천</Nav.Link>*/}
         </Nav>
       </Navbar.Collapse>
