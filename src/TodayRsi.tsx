@@ -158,15 +158,17 @@ export default function TodayRsi(props: Props) {
         formatter: (cell: number, row: TodayRsiData) => {
           if (0 < cell) {
             return (
-              <span className="change red">{`▲ ${(cell * 100).toFixed(
-                1
-              )} %`}</span>
+              <span className="change red">
+                <span className="arrow">▲ </span>
+                {`${(cell * 100).toFixed(1)} %`}
+              </span>
             );
           } else if (cell < 0) {
             return (
-              <span className="change blue">{`▼ ${(cell * 100).toFixed(
-                1
-              )} %`}</span>
+              <span className="change blue">
+                <span className="arrow">▼ </span>
+                {`${(cell * 100).toFixed(1)} %`}
+              </span>
             );
           }
 
