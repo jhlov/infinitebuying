@@ -28,6 +28,7 @@ interface TodayRsiData {
   sector?: string;
   recommendedRsi?: number;
   isStared?: boolean;
+  gap?: number;
 }
 
 interface Props {
@@ -126,7 +127,7 @@ export default function TodayRsi(props: Props) {
       },
       {
         dataField: "rsi",
-        text: "RSI",
+        text: "RSI(14)",
         formatter: (cell: number, row: TodayRsiData) => {
           return cell.toFixed(2);
         },
@@ -136,6 +137,14 @@ export default function TodayRsi(props: Props) {
         dataField: "recommendedRsi",
         text: "권장 RSI",
         sort: true
+      },
+      {
+        dataField: "gap",
+        text: "RSI 괴리율",
+        sort: true,
+        formatter: (cell: number, row: TodayRsiData) => {
+          return <span>{cell.toFixed(1)} %</span>;
+        }
       },
       {
         dataField: "close",
@@ -194,7 +203,11 @@ export default function TodayRsi(props: Props) {
           ...e,
           recommendedRsi: recommendedRsiList[e.ticker][0],
           sector: recommendedRsiList[e.ticker][1],
-          isStared: props.staredItemList.includes(e.ticker)
+          isStared: props.staredItemList.includes(e.ticker),
+          gap:
+            ((e.rsi - recommendedRsiList[e.ticker][0]) /
+              recommendedRsiList[e.ticker][0]) *
+            100
         })),
     [todayRsiDatas, props.staredItemList, props.showType]
   );
@@ -251,15 +264,14 @@ export default function TodayRsi(props: Props) {
 
   const rowClasses = (row: TodayRsiData, rowIndex: number): string => {
     if (row.rsi < row.recommendedRsi!) {
-      const rate: number =
-        ((row.recommendedRsi! - row.rsi) / row.recommendedRsi!) * 100;
-      if (rate < 10) {
+      const gap = Math.abs(row.gap!);
+      if (gap < 10) {
         return "recommended_10";
-      } else if (rate < 20) {
+      } else if (gap < 20) {
         return "recommended_20";
-      } else if (rate < 30) {
+      } else if (gap < 30) {
         return "recommended_30";
-      } else if (rate < 40) {
+      } else if (gap < 40) {
         return "recommended_40";
       } else {
         return "recommended";
