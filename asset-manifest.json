@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/infinitebuying/static/css/main.8bb734d5.chunk.css",
+    "main.css": "/infinitebuying/static/css/main.9a08a30c.chunk.css",
     "main.js": "/infinitebuying/static/js/main.46ba2394.chunk.js",
     "runtime-main.js": "/infinitebuying/static/js/runtime-main.68a13419.js",
     "static/js/2.b06a36a2.chunk.js": "/infinitebuying/static/js/2.b06a36a2.chunk.js",
@@ -11,7 +11,7 @@
   "entrypoints": [
     "static/js/runtime-main.68a13419.js",
     "static/js/2.b06a36a2.chunk.js",
-    "static/css/main.8bb734d5.chunk.css",
+    "static/css/main.9a08a30c.chunk.css",
     "static/js/main.46ba2394.chunk.js"
   ]
 }
