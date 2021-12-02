@@ -97,7 +97,7 @@ export default function TodayRsi(props: Props) {
   };
 
   const columns = useMemo(() => {
-    const _columns = [
+    return [
       {
         dataField: "isStared",
         text: "",
@@ -144,7 +144,8 @@ export default function TodayRsi(props: Props) {
         sort: true,
         formatter: (cell: number, row: TodayRsiData) => {
           return <span>{cell.toFixed(1)} %</span>;
-        }
+        },
+        hidden: isMobile
       },
       {
         dataField: "close",
@@ -174,22 +175,18 @@ export default function TodayRsi(props: Props) {
           );
         },
         sort: true
-      }
-    ];
-
-    if (isBrowser) {
-      _columns.push({
+      },
+      {
         dataField: "volume",
         text: "거래량",
         formatter: (cell: number, row: TodayRsiData) => {
           return utils.intComma(Math.round(cell));
         },
-        sort: true
-      });
-    }
-
-    return _columns;
-  }, [isBrowser, props.staredItemList]);
+        sort: true,
+        hidden: isMobile
+      }
+    ];
+  }, [isMobile, props.staredItemList]);
 
   const data = useMemo(
     () =>
