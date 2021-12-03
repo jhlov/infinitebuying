@@ -72,6 +72,22 @@ export default function TodayRsi(props: Props) {
     WEBL: [60, "기술"]
   };
 
+  const LOCBuyCarefulItems = [
+    "BNKU",
+    "CURE",
+    "DRN",
+    "DUSL",
+    "HIBL",
+    "MIDU",
+    "NAIL",
+    "PILL",
+    "RETL",
+    "TPOR",
+    "UTSL",
+    "WANT",
+    "WEBL"
+  ];
+
   useEffect(() => {
     initData();
   }, []);
@@ -123,7 +139,10 @@ export default function TodayRsi(props: Props) {
       {
         dataField: "ticker",
         text: "Ticker",
-        sort: true
+        sort: true,
+        formatter: (cell: string, row: TodayRsiData) => {
+          return `${cell}${LOCBuyCarefulItems.includes(cell) ? "*" : ""}`;
+        }
       },
       {
         dataField: "rsi",
@@ -346,15 +365,28 @@ export default function TodayRsi(props: Props) {
       </div>
 
       {0 < columns.length && (
-        <BootstrapTable
-          classes={classNames({ mobile: isMobile })}
-          keyField="ticker"
-          data={data}
-          columns={columns}
-          rowClasses={rowClasses}
-          condensed
-          noDataIndication="데이터가 없습니다."
-        />
+        <>
+          <p className="mb-0 text-left">
+            <small>
+              *:{" "}
+              <a
+                href="https://cafe.naver.com/infinitebuying/23962"
+                target="_blank"
+              >
+                LOC 매수 유의종목
+              </a>
+            </small>
+          </p>
+          <BootstrapTable
+            classes={classNames({ mobile: isMobile })}
+            keyField="ticker"
+            data={data}
+            columns={columns}
+            rowClasses={rowClasses}
+            condensed
+            noDataIndication="데이터가 없습니다."
+          />
+        </>
       )}
 
       {showLoading && <LoadingLayer />}
