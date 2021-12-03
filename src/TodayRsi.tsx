@@ -335,7 +335,9 @@ export default function TodayRsi(props: Props) {
           <OverlayTrigger
             placement="top"
             overlay={
-              <Tooltip id="tooltip">업데이트 시간: 매일 9시 10분</Tooltip>
+              <Tooltip id="tooltip">
+                매일 오전 8시 5분에 업데이트됩니다.
+              </Tooltip>
             }
           >
             <FontAwesomeIcon icon={faInfoCircle} />
