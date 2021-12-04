@@ -103,6 +103,10 @@
     color: #cccccc;
   }
 
+  .react-bootstrap-table .row-expand-slide-appear-active {
+    transition: max-height 0.5s linear !important;
+  }
+
   .period-rsi {
     .react-bootstrap-table {
       overflow-x: auto;

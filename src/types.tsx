@@ -1,3 +1,26 @@
+interface TodayRsiData {
+  change: number;
+  close: number;
+  diff: number;
+  rsi: number;
+  volume: number;
+  ticker: TickerType;
+  sector?: string;
+  recommendedRsi?: number;
+  isStared?: boolean;
+  gap?: number;
+}
+
+interface PeriodRsiData {
+  close: {
+    [key: string]: number[];
+  };
+  rsi: {
+    [key: string]: number[];
+  };
+  timestamp: string[];
+}
+
 type ShowType = "all" | "stared";
 
 type TickerType =
@@ -27,4 +50,4 @@ type TickerType =
   | "WANT"
   | "WEBL";
 
-export type { ShowType, TickerType };
+export type { TodayRsiData, PeriodRsiData, ShowType, TickerType };

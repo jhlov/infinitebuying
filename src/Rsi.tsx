@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PeriodRsi from "./PeriodRsi";
 import "./Rsi.scss";
 import TodayRsi from "./TodayRsi";
-import { ShowType, TickerType } from "./types";
+import { PeriodRsiData, ShowType, TickerType } from "./types";
 
 export default function Rsi() {
+  const [lastMonthRsiData, setLastMonthRsiData] =
+    useState<PeriodRsiData | null>(null);
   const [showType, setShowType] = useState<ShowType>(
     (localStorage.getItem("show_type") as ShowType) ?? "all"
   );
@@ -37,9 +39,14 @@ export default function Rsi() {
         setShowType={setShowType}
         staredItemList={staredItemList}
         onClickStaredItem={onClickStaredItem}
+        lastMonthRsiData={lastMonthRsiData}
       />
       <hr />
-      <PeriodRsi showType={showType} staredItemList={staredItemList} />
+      <PeriodRsi
+        showType={showType}
+        staredItemList={staredItemList}
+        setLastMonthRsiData={setLastMonthRsiData}
+      />
     </div>
   );
 }

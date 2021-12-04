@@ -2,6 +2,8 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import classNames from "classnames";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Button,
@@ -12,30 +14,19 @@ import {
   Tooltip
 } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import { isBrowser, isMobile } from "react-device-detect";
 import LoadingLayer from "./LoadingLayer";
 import "./Rsi.scss";
-import { ShowType, TickerType } from "./types";
+import { PeriodRsiData, ShowType, TickerType, TodayRsiData } from "./types";
 import utils from "./utils";
-
-interface TodayRsiData {
-  change: number;
-  close: number;
-  diff: number;
-  rsi: number;
-  volume: number;
-  ticker: TickerType;
-  sector?: string;
-  recommendedRsi?: number;
-  isStared?: boolean;
-  gap?: number;
-}
 
 interface Props {
   showType: ShowType;
   setShowType: (showType: ShowType) => void;
   staredItemList: TickerType[];
   onClickStaredItem: (ticker: TickerType) => void;
+  lastMonthRsiData: PeriodRsiData | null;
 }
 
 export default function TodayRsi(props: Props) {
@@ -299,6 +290,109 @@ export default function TodayRsi(props: Props) {
     return "";
   };
 
+  const expandRow = {
+    renderer: (row: TodayRsiData) => {
+      const closeOptions: Highcharts.Options = {
+        title: {
+          text: `${row.ticker} 최근 한달 종가`,
+          align: "left"
+        },
+        xAxis: {
+          categories: props.lastMonthRsiData?.timestamp
+        },
+        yAxis: {
+          title: {
+            text: null
+          }
+        },
+        plotOptions: {
+          line: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        series: [
+          {
+            type: "line",
+            name: "종가",
+            lineWidth: 1.3,
+            marker: {
+              enabled: false
+            },
+            states: {
+              hover: {
+                lineWidth: 1.3
+              }
+            },
+            data: props.lastMonthRsiData?.close[row.ticker]
+          }
+        ]
+      };
+
+      const rsiOptions: Highcharts.Options = {
+        title: {
+          text: `${row.ticker} 최근 한달 RSI`,
+          align: "left"
+        },
+        xAxis: {
+          categories: props.lastMonthRsiData?.timestamp
+        },
+        yAxis: {
+          title: {
+            text: null
+          }
+        },
+        plotOptions: {
+          line: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        series: [
+          {
+            type: "line",
+            name: "RSI",
+            lineWidth: 1.3,
+            marker: {
+              enabled: false
+            },
+            states: {
+              hover: {
+                lineWidth: 1.3
+              }
+            },
+            data: props.lastMonthRsiData?.rsi[row.ticker]
+          },
+          {
+            type: "line",
+            name: "권장 RSI",
+            lineWidth: 1.3,
+            enableMouseTracking: false,
+            marker: {
+              enabled: false
+            },
+            dataLabels: {
+              enabled: false
+            },
+            data: Array(props.lastMonthRsiData?.timestamp.length ?? 0).fill(
+              recommendedRsiList[row.ticker][0]
+            ),
+            color: "red"
+          }
+        ]
+      };
+
+      return (
+        <>
+          <HighchartsReact highcharts={Highcharts} options={closeOptions} />
+          <HighchartsReact highcharts={Highcharts} options={rsiOptions} />
+        </>
+      );
+    }
+  };
+
   return (
     <div className="rsi py-4">
       <div
@@ -377,12 +471,19 @@ export default function TodayRsi(props: Props) {
               </a>
             </small>
           </p>
+          <p className="mb-0 text-left">
+            <small>
+              - 테이블을 클릭하면 최근 한달 종가, RSI 데이터를 그래프로 확인 할
+              수 있습니다.
+            </small>
+          </p>
           <BootstrapTable
             classes={classNames({ mobile: isMobile })}
             keyField="ticker"
             data={data}
             columns={columns}
             rowClasses={rowClasses}
+            expandRow={expandRow}
             condensed
             noDataIndication="데이터가 없습니다."
           />

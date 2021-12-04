@@ -4,14 +4,16 @@ import moment from "moment";
 import React, { useEffect, useMemo, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import BootstrapTable, { ColumnDescription } from "react-bootstrap-table-next";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import { isBrowser, isMobile } from "react-device-detect";
 import LoadingLayer from "./LoadingLayer";
 import "./Rsi.scss";
-import { ShowType, TickerType } from "./types";
+import { PeriodRsiData, ShowType, TickerType } from "./types";
 
 interface Props {
   showType: ShowType;
   staredItemList: TickerType[];
+  setLastMonthRsiData: (data: PeriodRsiData) => void;
 }
 
 export default function PeriodRsi(props: Props) {
@@ -59,14 +61,14 @@ export default function PeriodRsi(props: Props) {
     setStartDate(start);
     setEndDate(end);
 
-    fetchData(start, end);
+    fetchData(start, end, true);
   }, []);
 
-  const fetchData = async (start: string, end: string) => {
+  const fetchData = async (start: string, end: string, isInit = false) => {
     setShowLoading(true);
 
     try {
-      const res = await axios.get(
+      const res = await axios.get<PeriodRsiData>(
         `https://61exw746vf.execute-api.ap-northeast-2.amazonaws.com/default/period_rsi?start_date=${start}&end_date=${end}`
       );
 
@@ -74,8 +76,12 @@ export default function PeriodRsi(props: Props) {
         setTimestamp(res.data.timestamp);
         setRsiData(res.data.rsi);
         setCloseData(res.data.close);
+
+        if (isInit) {
+          props.setLastMonthRsiData(res.data);
+        }
       } else {
-        alert(res.data.error);
+        alert((res.data as any).error);
       }
     } finally {
       setShowLoading(false);
