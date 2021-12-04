@@ -103,8 +103,32 @@
     color: #cccccc;
   }
 
+  .react-bootstrap-table .reset-expansion-style {
+    padding: 0;
+  }
+
+  .react-bootstrap-table .row-expansion-style {
+    padding: 8px;
+  }
+
+  .react-bootstrap-table .row-expand-slide-appear {
+    max-height: 0;
+    overflow: hidden;
+  }
+
   .react-bootstrap-table .row-expand-slide-appear-active {
-    transition: max-height 0.5s linear !important;
+    max-height: 1000px;
+    transition: max-height 0.5s linear;
+  }
+
+  .react-bootstrap-table .row-expand-slide-exit {
+    max-height: 1000px;
+  }
+
+  .react-bootstrap-table .row-expand-slide-exit-active {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 400ms cubic-bezier(0, 0.95, 0, 0.95);
   }
 
   .period-rsi {

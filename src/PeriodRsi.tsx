@@ -4,7 +4,6 @@ import moment from "moment";
 import React, { useEffect, useMemo, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import BootstrapTable, { ColumnDescription } from "react-bootstrap-table-next";
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import { isBrowser, isMobile } from "react-device-detect";
 import LoadingLayer from "./LoadingLayer";
 import "./Rsi.scss";
