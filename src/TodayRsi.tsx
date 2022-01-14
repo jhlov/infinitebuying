@@ -188,6 +188,47 @@ export default function TodayRsi(props: Props) {
         sort: true
       },
       {
+        dataField: "last_year_close",
+        text: "1년전주가",
+        formatter: (cell: number, row: TodayRsiData) => {
+          if (!cell) {
+            return "";
+          }
+
+          const diff = (row.close - cell) / cell;
+          if (0 < diff) {
+            return (
+              <>
+                <span className="mr-1">{utils.intComma(cell)}</span>
+                <span className="change red small">
+                  (<span className="arrow">▲ </span>
+                  {`${(diff * 100).toFixed(1)} %`})
+                </span>
+              </>
+            );
+          } else if (diff < 0) {
+            return (
+              <>
+                <span className="mr-1">{utils.intComma(cell)}</span>
+                <span className="change blue small">
+                  (<span className="arrow">▼ </span>
+                  {`${(diff * 100).toFixed(1)} %`})
+                </span>
+              </>
+            );
+          }
+
+          return (
+            <>
+              <span className="mr-1">{utils.intComma(cell)}</span>
+              <span className="change">({(diff * 100).toFixed(1) + "%"})</span>
+            </>
+          );
+        },
+        sort: true,
+        hidden: isMobile
+      },
+      {
         dataField: "volume",
         text: "거래량",
         formatter: (cell: number, row: TodayRsiData) => {
