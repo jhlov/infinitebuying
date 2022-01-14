@@ -33,6 +33,7 @@ export default function TodayRsi(props: Props) {
   const [curDate, setCurDate] = useState<string>("");
   const [todayRsiDatas, setTodayRsiDatas] = useState<TodayRsiData[]>([]);
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  const [graphType, setGraphType] = useState<string>("rsi");
 
   const recommendedRsiList: { [key: string]: [number, string] } = {
     BNKU: [35, "금융"],
@@ -425,10 +426,26 @@ export default function TodayRsi(props: Props) {
       };
 
       return (
-        <>
-          <HighchartsReact highcharts={Highcharts} options={closeOptions} />
-          <HighchartsReact highcharts={Highcharts} options={rsiOptions} />
-        </>
+        <div className="position-relative">
+          <ButtonGroup className="graph-type-btn" size="sm">
+            {["rsi", "close"].map((e: string) => (
+              <Button
+                key={e}
+                variant="outline-info"
+                onClick={() => setGraphType(e)}
+                active={graphType === e}
+              >
+                {e}
+              </Button>
+            ))}
+          </ButtonGroup>
+          {graphType === "close" && (
+            <HighchartsReact highcharts={Highcharts} options={closeOptions} />
+          )}
+          {graphType === "rsi" && (
+            <HighchartsReact highcharts={Highcharts} options={rsiOptions} />
+          )}
+        </div>
       );
     }
   };
