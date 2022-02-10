@@ -1,6 +1,7 @@
 import axios from "axios";
 import classNames from "classnames";
 import React, { useState } from "react";
+import AdSense from "react-adsense";
 import { Spinner, Table } from "react-bootstrap";
 import Condition from "./Condition";
 import { IBResponseData, IBTestParams } from "./interfaces";
@@ -73,6 +74,16 @@ const Lab = () => {
   return (
     <div className="mt-3">
       <Condition startBacktest={startBacktest} />
+
+      {/* google adsense */}
+      <AdSense.Google
+        className="my-2"
+        style={{ display: "block" }}
+        client="ca-pub-7150456660061561"
+        slot="1671889334"
+        format="auto"
+        responsive="true"
+      />
 
       {loding && (
         <div className="mt-5">

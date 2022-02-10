@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import AdSense from "react-adsense";
 import PeriodRsi from "./PeriodRsi";
 import "./Rsi.scss";
 import TodayRsi from "./TodayRsi";
@@ -41,6 +42,17 @@ export default function Rsi() {
         onClickStaredItem={onClickStaredItem}
         lastMonthRsiData={lastMonthRsiData}
       />
+
+      {/* google adsense */}
+      <AdSense.Google
+        className="my-2"
+        style={{ display: "block" }}
+        client="ca-pub-7150456660061561"
+        slot="1671889334"
+        format="auto"
+        responsive="true"
+      />
+
       <hr />
       <PeriodRsi
         showType={showType}
