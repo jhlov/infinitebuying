@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/infinitebuying/static/css/main.f06cd0cb.chunk.css",
-    "main.js": "/infinitebuying/static/js/main.3c70bdee.chunk.js",
+    "main.js": "/infinitebuying/static/js/main.40965fad.chunk.js",
     "runtime-main.js": "/infinitebuying/static/js/runtime-main.64792fc3.js",
     "static/js/2.dc60423b.chunk.js": "/infinitebuying/static/js/2.dc60423b.chunk.js",
     "static/js/3.2709a710.chunk.js": "/infinitebuying/static/js/3.2709a710.chunk.js",
@@ -12,6 +12,6 @@
     "static/js/runtime-main.64792fc3.js",
     "static/js/2.dc60423b.chunk.js",
     "static/css/main.f06cd0cb.chunk.css",
-    "static/js/main.3c70bdee.chunk.js"
+    "static/js/main.40965fad.chunk.js"
   ]
 }
