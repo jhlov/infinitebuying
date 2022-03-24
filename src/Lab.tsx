@@ -1,6 +1,8 @@
 import axios from "axios";
 import classNames from "classnames";
-import React, { useState } from "react";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import React, { useMemo, useState } from "react";
 import AdSense from "react-adsense";
 import { Spinner, Table } from "react-bootstrap";
 import Condition from "./Condition";
@@ -26,8 +28,7 @@ const Lab = () => {
 
     try {
       const res = await axios.get(
-        //"https://54o7jbyvz3.execute-api.ap-northeast-2.amazonaws.com/default/infinitebuying",
-        "https://54o7jbyvz3.execute-api.ap-northeast-2.amazonaws.com/dev/infinitebuying-dev",
+        "https://cr2lbm4puk.execute-api.ap-northeast-2.amazonaws.com/default/infinitebuying-v2",
         {
           params: {
             stock: testParams.stock,
@@ -71,6 +72,65 @@ const Lab = () => {
     return false;
   };
 
+  const chartOptions = useMemo(() => {
+    if (data) {
+      return {
+        title: {
+          text: ""
+        },
+        xAxis: {
+          categories: data.buying_info.map(info => info.date)
+        },
+        yAxis: {
+          title: {
+            text: null
+          }
+        },
+        plotOptions: {
+          line: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        series: [
+          {
+            type: "line",
+            name: "종가",
+            lineWidth: 1.3,
+            marker: {
+              enabled: false
+            },
+            states: {
+              hover: {
+                lineWidth: 1.3
+              }
+            },
+            data: data.buying_info.map(info => Number(info.close.toFixed(2)))
+          },
+          {
+            type: "line",
+            name: "평단가",
+            lineWidth: 1.3,
+            marker: {
+              enabled: false
+            },
+            states: {
+              hover: {
+                lineWidth: 1.3
+              }
+            },
+            data: data.buying_info.map(info =>
+              Number(info.avg_price.toFixed(2))
+            )
+          }
+        ]
+      };
+    }
+
+    return {};
+  }, [data]);
+
   return (
     <div className="mt-3">
       <Condition startBacktest={startBacktest} />
@@ -91,98 +151,104 @@ const Lab = () => {
       )}
 
       {data !== null && (
-        <Table className="mt-5">
-          <thead>
-            <tr>
-              <th>일차</th>
-              <th>날짜</th>
-              <th>
-                종가
-                <br />
-                (매수단가)
-              </th>
-              <th>매수개수</th>
-              <th>매수금</th>
-              <th>평단가</th>
-              <th>보유개수</th>
-              <th>평가금</th>
-              <th>총매수금</th>
-              <th>수익금</th>
-              <th>수익률</th>
-              <th>원금대비수익률</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.buying_info.map(e => (
-              <tr key={e.days}>
-                <td>{e.days}일</td>
-                <td>{e.date}</td>
-                <td>{utils.intComma(e.close)}</td>
-                <td>{utils.intComma(e.buying_count)}</td>
-                <td>{utils.intComma(e.buying_price.toFixed(2))}</td>
-                <td>{utils.intComma(e.avg_price.toFixed(2))}</td>
-                <td>{utils.intComma(e.total_count)}</td>
-                <td>{utils.intComma(e.evaluated_price.toFixed(2))}</td>
-                <td>{utils.intComma(e.total_price.toFixed(2))}</td>
-                <td>{utils.intComma(e.profits.toFixed(2))}</td>
-                <td
-                  className={classNames({
-                    "table-danger": isMaximumLoss(e.profits_rate)
-                  })}
-                >
-                  {(e.profits_rate * 100).toFixed(2)}%
-                </td>
-                <td>{(e.total_money_profits_rate * 100).toFixed(2)}%</td>
-              </tr>
-            ))}
-          </tbody>
-          {data.sell_info !== null && (
+        <>
+          <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+          <Table className="mt-5">
             <thead>
               <tr>
                 <th>일차</th>
                 <th>날짜</th>
-                <th>종가</th>
-                <th></th>
-                <th></th>
-                <th>매도가</th>
-                <th>매도개수</th>
-                <th>매도금</th>
                 <th>
-                  매도시점
+                  종가
                   <br />
-                  총매수금
+                  (매수단가)
                 </th>
+                <th>매수개수</th>
+                <th>매수금</th>
+                <th>평단가</th>
+                <th>보유개수</th>
+                <th>평가금</th>
+                <th>총매수금</th>
                 <th>수익금</th>
                 <th>수익률</th>
                 <th>원금대비수익률</th>
               </tr>
             </thead>
-          )}
-          {data.sell_info !== null && (
-            <tbody className="sell">
-              <tr>
-                <td>{data.sell_info.days}일</td>
-                <td>{data.sell_info.date}</td>
-                <td>{utils.intComma(data.sell_info.close)}</td>
-                <td></td>
-                <td></td>
-                <td>
-                  {utils.intComma(data.sell_info.sell_unit_price.toFixed(2))}
-                </td>
-                <td>{utils.intComma(data.sell_info.sell_count)}</td>
-                <td>
-                  {utils.intComma(data.sell_info.evaluated_price.toFixed(2))}
-                </td>
-                <td>{utils.intComma(data.sell_info.total_price.toFixed(2))}</td>
-                <td>{utils.intComma(data.sell_info.profits.toFixed(2))}</td>
-                <td>{(data.sell_info.profits_rate * 100).toFixed(2)}%</td>
-                <td>
-                  {(data.sell_info.total_money_profits_rate * 100).toFixed(2)}%
-                </td>
-              </tr>
+            <tbody>
+              {data.buying_info.map(e => (
+                <tr key={e.days}>
+                  <td>{e.days}일</td>
+                  <td>{e.date}</td>
+                  <td>{utils.intComma(e.close.toFixed(2))}</td>
+                  <td>{utils.intComma(e.buying_count)}</td>
+                  <td>{utils.intComma(e.buying_price.toFixed(2))}</td>
+                  <td>{utils.intComma(e.avg_price.toFixed(2))}</td>
+                  <td>{utils.intComma(e.total_count)}</td>
+                  <td>{utils.intComma(e.evaluated_price.toFixed(2))}</td>
+                  <td>{utils.intComma(e.total_price.toFixed(2))}</td>
+                  <td>{utils.intComma(e.profits.toFixed(2))}</td>
+                  <td
+                    className={classNames({
+                      "table-danger": isMaximumLoss(e.profits_rate)
+                    })}
+                  >
+                    {(e.profits_rate * 100).toFixed(2)}%
+                  </td>
+                  <td>{(e.total_money_profits_rate * 100).toFixed(2)}%</td>
+                </tr>
+              ))}
             </tbody>
-          )}
-        </Table>
+            {data.sell_info !== null && (
+              <thead>
+                <tr>
+                  <th>일차</th>
+                  <th>날짜</th>
+                  <th>종가</th>
+                  <th></th>
+                  <th></th>
+                  <th>매도가</th>
+                  <th>매도개수</th>
+                  <th>매도금</th>
+                  <th>
+                    매도시점
+                    <br />
+                    총매수금
+                  </th>
+                  <th>수익금</th>
+                  <th>수익률</th>
+                  <th>원금대비수익률</th>
+                </tr>
+              </thead>
+            )}
+            {data.sell_info !== null && (
+              <tbody className="sell">
+                <tr>
+                  <td>{data.sell_info.days}일</td>
+                  <td>{data.sell_info.date}</td>
+                  <td>{utils.intComma(data.sell_info.close.toFixed(2))}</td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    {utils.intComma(data.sell_info.sell_unit_price.toFixed(2))}
+                  </td>
+                  <td>{utils.intComma(data.sell_info.sell_count)}</td>
+                  <td>
+                    {utils.intComma(data.sell_info.evaluated_price.toFixed(2))}
+                  </td>
+                  <td>
+                    {utils.intComma(data.sell_info.total_price.toFixed(2))}
+                  </td>
+                  <td>{utils.intComma(data.sell_info.profits.toFixed(2))}</td>
+                  <td>{(data.sell_info.profits_rate * 100).toFixed(2)}%</td>
+                  <td>
+                    {(data.sell_info.total_money_profits_rate * 100).toFixed(2)}
+                    %
+                  </td>
+                </tr>
+              </tbody>
+            )}
+          </Table>
+        </>
       )}
     </div>
   );

@@ -160,6 +160,9 @@ export default function TodayRsi(props: Props) {
       {
         dataField: "close",
         text: "현재가",
+        formatter: (cell: number, row: TodayRsiData) => {
+          return cell.toFixed(2);
+        },
         sort: true
       },
       {
@@ -366,7 +369,9 @@ export default function TodayRsi(props: Props) {
                 lineWidth: 1.3
               }
             },
-            data: props.lastMonthRsiData?.close[row.ticker]
+            data: props.lastMonthRsiData?.close[row.ticker].map(e =>
+              Number(e.toFixed(2))
+            )
           }
         ]
       };
