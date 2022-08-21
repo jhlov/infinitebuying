@@ -2,7 +2,7 @@ import axios from "axios";
 import classNames from "classnames";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import AdSense from "react-adsense";
 import { Spinner, Table } from "react-bootstrap";
 import Condition from "./Condition";
@@ -153,7 +153,7 @@ const Lab = () => {
       {data !== null && (
         <>
           <HighchartsReact highcharts={Highcharts} options={chartOptions} />
-          <Table className="mt-5">
+          <Table className="mt-5" size="sm">
             <thead>
               <tr>
                 <th>일차</th>

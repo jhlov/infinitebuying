@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Button, ButtonGroup, Col, Form, Row } from "react-bootstrap";
 import "./Condition.scss";
 import { IBBuyingSellingCondition } from "./interfaces";
@@ -14,7 +14,7 @@ interface Props {
 const Condition = ({ startBacktest }: Props) => {
   const [selectedStock, setSelectedStock] = useState<string>("TQQQ");
   const [customStock, setCustomStock] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>("2021-01-01");
+  const [startDate, setStartDate] = useState<string>("2022-01-01");
   const [money, setMoney] = useState<number>(10000);
   const [totalDays, setTotalDays] = useState<number>(40);
   const [firstBuyingPriceType, setFirstBuyingPriceType] =
@@ -41,48 +41,60 @@ const Condition = ({ startBacktest }: Props) => {
   const minMoney = 10000;
 
   const stockList: string[][] = [
-    ["TECL", "TECL"],
-    ["FAS", "FAS"],
-    ["RETL", "RETL"],
-    ["DPST", "DPST"],
-    ["DUSL", "DUSL"],
-    ["NAIL", "NAIL"],
-    ["LABU", "LABU"],
-    ["TQQQ", "TQQQ"],
-    ["FNGU", "FNGU"],
     ["BNKU", "BNKU"],
-    ["UPRO", "UPRO"],
-    ["TPOR", "TPOR"],
+    ["BULZ", "BULZ"],
+    ["CURE", "CURE"],
     ["DFEN", "DFEN"],
-    ["WEBL", "WEBL"],
-    ["TNA", "TNA"],
-    ["MIDU", "MIDU"],
+    ["DPST", "DPST"],
+    ["DRN", "DRN"],
+    ["DUSL", "DUSL"],
+    ["FAS", "FAS"],
+    ["FNGU", "FNGU"],
     ["HIBL", "HIBL"],
-    ["WANT", "WANT"],
+    ["LABU", "LABU"],
+    ["MIDU", "MIDU"],
+    ["NAIL", "NAIL"],
+    ["PILL", "PILL"],
+    ["RETL", "RETL"],
     ["SOXL", "SOXL"],
+    ["TECL", "TECL"],
+    ["TNA", "TNA"],
+    ["TPOR", "TPOR"],
+    ["TQQQ", "TQQQ"],
+    ["UDOW", "UDOW"],
+    ["UPRO", "UPRO"],
+    ["UTSL", "UTSL"],
+    ["WANT", "WANT"],
+    ["WEBL", "WEBL"],
     ["직접선택", "CUSTOM"]
   ];
 
   const minDateList: { [key: string]: string } = {
-    TECL: "2008-12-18",
-    FAS: "2008-11-07",
-    RETL: "2010-07-15",
-    DPST: "2015-08-20",
-    DUSL: "2017-05-04",
-    NAIL: "2015-08-20",
-    LABU: "2015-05-29",
-    TQQQ: "2010-02-11",
-    FNGU: "2018-01-24",
     BNKU: "2019-04-04",
-    UPRO: "2009-06-26",
-    TPOR: "2017-11-07",
+    BULZ: "2021-08-20",
+    CURE: "2011-06-15",
     DFEN: "2017-05-04",
-    WEBL: "2019-11-08",
-    TNA: "2008-11-06",
-    MIDU: "2009-01-09",
+    DPST: "2015-08-20",
+    DRN: "2009-07-17",
+    DUSL: "2017-05-04",
+    FAS: "2008-11-07",
+    FNGU: "2018-01-24",
     HIBL: "2019-11-08",
-    WANT: "2018-12-03",
+    LABU: "2015-05-29",
+    MIDU: "2009-01-09",
+    NAIL: "2015-08-20",
+    PILL: "2017-11-17",
+    RETL: "2010-07-15",
     SOXL: "2010-03-12",
+    TECL: "2008-12-18",
+    TNA: "2008-11-06",
+    TPOR: "2017-11-07",
+    TQQQ: "2010-02-11",
+    UDOW: "2010-02-12",
+    UPRO: "2009-06-26",
+    UTSL: "2017-05-05",
+    WANT: "2018-12-03",
+    WEBL: "2019-11-08",
     CUSTOM: "2000-01-01"
   };
 
