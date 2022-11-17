@@ -4,7 +4,7 @@ import axios from "axios";
 import classNames from "classnames";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -161,7 +161,7 @@ export default function TodayRsi(props: Props) {
         dataField: "close",
         text: "현재가",
         formatter: (cell: number, row: TodayRsiData) => {
-          return cell.toFixed(2);
+          return utils.intComma(cell.toFixed(2));
         },
         sort: true
       },
@@ -203,7 +203,7 @@ export default function TodayRsi(props: Props) {
           if (0 < diff) {
             return (
               <>
-                <span className="mr-1">{utils.intComma(cell)}</span>
+                <span className="mr-1">{utils.intComma(cell.toFixed(2))}</span>
                 <span className="change red small">
                   (<span className="arrow">▲ </span>
                   {`${(diff * 100).toFixed(1)} %`})
@@ -213,7 +213,7 @@ export default function TodayRsi(props: Props) {
           } else if (diff < 0) {
             return (
               <>
-                <span className="mr-1">{utils.intComma(cell)}</span>
+                <span className="mr-1">{utils.intComma(cell.toFixed(2))}</span>
                 <span className="change blue small">
                   (<span className="arrow">▼ </span>
                   {`${(diff * 100).toFixed(1)} %`})
@@ -224,7 +224,7 @@ export default function TodayRsi(props: Props) {
 
           return (
             <>
-              <span className="mr-1">{utils.intComma(cell)}</span>
+              <span className="mr-1">{utils.intComma(cell.toFixed(2))}</span>
               <span className="change">({(diff * 100).toFixed(1) + "%"})</span>
             </>
           );
